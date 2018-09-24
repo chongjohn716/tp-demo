@@ -2066,8 +2066,10 @@
 								this._height = a
 						}
 					}
-				}),
-				g.prototype = new c,
+				});
+
+
+			g.prototype = new c,
 				h.prototype = new c,
 				i.prototype = new c,
 				a.Node = c,
@@ -2252,7 +2254,7 @@
 							a.stroke(),
 							a.closePath()
 					},
-					this.paintArrow = function (b, c, d) {
+					this.paintArrow = function (b, c, d, flag) {
 						var e = this.arrowsOffset,
 							f = this.arrowsRadius / 2,
 							g = c,
@@ -2278,7 +2280,13 @@
 							b.lineTo(m, n),
 							b.lineTo(p.x, p.y),
 							b.stroke(),
-							b.closePath()
+							b.closePath();
+
+						if (flag) {
+							return
+						}
+
+						this.paintArrow(b, d, c, true)
 					},
 					this.paint = function (a) {
 						if (null != this.nodeA && null != !this.nodeZ) {
@@ -2651,7 +2659,7 @@
 				a.Container = b
 		}
 		(JTopo), function (a) {
-			function b(a) {
+			function getNodesCenter(a) {
 				var b = 0,
 					c = 0;
 				a.forEach(function (a) {
@@ -2664,7 +2672,7 @@
 				};
 				return d
 			}
-			function c(c, d) {
+			function circleLayoutNodes(c, d) {
 				null == d && (d = {}); {
 					var e = d.cx,
 						f = d.cy,
@@ -2728,7 +2736,7 @@
 					radiusB: s
 				}
 			}
-			function d(a, b) {
+			function GridLayout(a, b) {
 				return function (c) {
 					var d = c.childs;
 					if (!(d.length <= 0))
@@ -2742,7 +2750,7 @@
 							}
 				}
 			}
-			function e(a, b) {
+			function FlowLayout(a, b) {
 				return null == a && (a = 0),
 					null == b && (b = 0),
 					function (c) {
@@ -2756,7 +2764,7 @@
 							}
 					}
 			}
-			function f() {
+			function AutoBoundLayout() {
 				return function (a, b) {
 					if (b.length > 0) {
 						for (var c = 1e7, d = -1e7, e = 1e7, f = -1e7, g = d - c, h = f - e, i = 0; i < b.length; i++) {
@@ -2775,7 +2783,7 @@
 					}
 				}
 			}
-			function g(b) {
+			function getRootNodes(b) {
 				var c = [],
 					d = b.filter(function (b) {
 						return b instanceof a.Link ? !0 : (c.push(b), !1)
@@ -2823,7 +2831,7 @@
 				return c(b, 0),
 					d
 			}
-			function k(b, c, d) {
+			function TreeLayout(b, c, d) {
 				return function (e) {
 					function f(f, g) {
 						for (var h = a.layout.getTreeDeep(f, g), k = j(f, g), l = k["" + h].nodes, m = 0; m < l.length; m++) {
@@ -2864,7 +2872,7 @@
 					}
 				}
 			}
-			function l(b) {
+			function CircleLayout(b) {
 				return function (c) {
 					function d(a, c, e) {
 						var f = q(a, c);
@@ -2957,7 +2965,7 @@
 						});
 				return g
 			}
-			function p(a, b) {
+			function adjustPosition(a, b) {
 				if (a.layout) {
 					var c = a.layout,
 						d = c.type,
@@ -2979,12 +2987,12 @@
 						b[j].setCenterLocation(e[j].x, e[j].y)
 				}
 			}
-			function q(b, c) {
+			function getNodeChilds(b, c) {
 				for (var d = [], e = 0; e < b.length; e++)
 					b[e] instanceof a.Link && b[e].nodeA === c && d.push(b[e].nodeZ);
 				return d
 			}
-			function r(a, b, c) {
+			function layoutNode(a, b, c) {
 				var d = q(a.childs, b);
 				if (0 == d.length)
 					return null;
@@ -2993,7 +3001,7 @@
 						r(a, d[e], c);
 				return null
 			}
-			function s(b, c) {
+			function springLayout(b, c) {
 				function d(a, b) {
 					var c = a.x - b.x,
 						d = a.y - b.y;
@@ -3021,7 +3029,7 @@
 					l = c.getElementsByClass(a.Node);
 				e()
 			}
-			function t(a, b) {
+			function getTreeDeep(a, b) {
 				function c(a, b, e) {
 					var f = q(a, b);
 					e > d && (d = e);
@@ -3032,34 +3040,39 @@
 				return c(a, b, 0),
 					d
 			}
-			a.layout = a.Layout = {
-				layoutNode: r,
-				getNodeChilds: q,
-				adjustPosition: p,
-				springLayout: s,
-				getTreeDeep: t,
-				getRootNodes: g,
-				GridLayout: d,
-				FlowLayout: e,
-				AutoBoundLayout: f,
-				FixedBoundLayout: function () {
-					return function (a, b) {
-						if (b.length > 0) {
-							bound = a.getBound()
-							for (i = 0; i < b.length; i++) {
-								var j = b[i];
-								(j.x + j.width > bound.right) && (j.x = bound.right - j.width);
-								(j.x < bound.left) && (j.x = bound.left);
-								(j.y < bound.top) && (j.y = bound.top);
-								(j.y + j.height > bound.bottom) && (j.y = bound.bottom - j.height);
-							}
+			function FixedBoundLayout() {
+				return function (a, b) {
+					if (b.length > 0) {
+						bound = a.getBound()
+						for (i = 0; i < b.length; i++) {
+							var j = b[i];
+							var x = j.x, y = j.y;
+							(j.x + j.width > bound.right) && (x = bound.right - j.width);
+							(j.x < bound.left) && (x = bound.left);
+							(j.y < bound.top) && (y = bound.top);
+							(j.y + j.height > bound.bottom) && (y = bound.bottom - j.height);
+
+							j.setLocation(x, y)
 						}
 					}
-				},
-				CircleLayout: l,
-				TreeLayout: k,
-				getNodesCenter: b,
-				circleLayoutNodes: c
+				}
+			}
+
+			a.layout = a.Layout = {
+				layoutNode: layoutNode,
+				getNodeChilds: getNodeChilds,
+				adjustPosition: adjustPosition,
+				springLayout: springLayout,
+				getTreeDeep: getTreeDeep,
+				getRootNodes: getRootNodes,
+				GridLayout: GridLayout,
+				FlowLayout: FlowLayout,
+				AutoBoundLayout: AutoBoundLayout,
+				FixedBoundLayout: FixedBoundLayout,
+				CircleLayout: CircleLayout,
+				TreeLayout: TreeLayout,
+				getNodesCenter: getNodesCenter,
+				circleLayoutNodes: circleLayoutNodes
 			}
 		}
 		(JTopo), function (a) {
