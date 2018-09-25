@@ -2323,10 +2323,10 @@
 					}
 				},
 					this.paintSelected = function (a) {
-						// a.shadowBlur = 10,
-						// a.shadowColor = "rgba(0,0,0,1)",
-						// a.shadowOffsetX = 0,
-						// a.shadowOffsetY = 0
+						a.shadowBlur = 10,
+							a.shadowColor = "rgba(0,0,0,1)",
+							a.shadowOffsetX = 0,
+							a.shadowOffsetY = 0
 					},
 					this.isInBound = function (b, c) {
 						if (this.nodeA === this.nodeZ) {

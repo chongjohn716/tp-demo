@@ -1111,6 +1111,7 @@
 							this.mouseDown = !1
 					},
 					this.dragElements = function (b) {
+						debugger
 						if (null != this.currentElement && 1 == this.currentElement.dragable)
 							for (var c = 0; c < this.selectedElements.length; c++) {
 								var d = this.selectedElements[c];
@@ -1123,7 +1124,16 @@
 					},
 					this.mousedragHandler = function (b) {
 						var c = this.toSceneEvent(b);
-						this.mode == a.SceneMode.normal ? null == this.currentElement || this.currentElement instanceof a.Link ? 1 == this.translate && (this.stage.cursor = a.MouseCursor.closed_hand, this.translateX = this.lastTranslateX + c.dx, this.translateY = this.lastTranslateY + c.dy) : this.dragElements(c) : this.mode == a.SceneMode.drag ? 1 == this.translate && (this.stage.cursor = a.MouseCursor.closed_hand, this.translateX = this.lastTranslateX + c.dx, this.translateY = this.lastTranslateY + c.dy) : this.mode == a.SceneMode.select ? null != this.currentElement ? 1 == this.currentElement.dragable && this.dragElements(c) : 1 == this.areaSelect && this.areaSelectHandle(c) : this.mode == a.SceneMode.edit && (null == this.currentElement || this.currentElement instanceof a.Link ? 1 == this.translate && (this.stage.cursor = a.MouseCursor.closed_hand, this.translateX = this.lastTranslateX + c.dx, this.translateY = this.lastTranslateY + c.dy) : this.dragElements(c)),
+						this.mode == a.SceneMode.normal ?
+							null == this.currentElement ?
+								1 == this.translate && (this.stage.cursor = a.MouseCursor.closed_hand, this.translateX = this.lastTranslateX + c.dx, this.translateY = this.lastTranslateY + c.dy) :
+								this.dragElements(c) :
+							this.mode == a.SceneMode.drag ?
+								1 == this.translate && (this.stage.cursor = a.MouseCursor.closed_hand, this.translateX = this.lastTranslateX + c.dx, this.translateY = this.lastTranslateY + c.dy) :
+								this.mode == a.SceneMode.select ?
+									null != this.currentElement ? 1 == this.currentElement.dragable && this.dragElements(c) :
+										1 == this.areaSelect && this.areaSelectHandle(c) :
+									this.mode == a.SceneMode.edit && (null == this.currentElement || this.currentElement instanceof a.Link ? 1 == this.translate && (this.stage.cursor = a.MouseCursor.closed_hand, this.translateX = this.lastTranslateX + c.dx, this.translateY = this.lastTranslateY + c.dy) : this.dragElements(c)),
 							this.dispatchEvent("mousedrag", c)
 					},
 					this.areaSelectHandle = function (a) {

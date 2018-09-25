@@ -134,30 +134,46 @@
 			return link;
 		}
 
-		// var from = newNode(100, 200, 30, 30);
-		// var to = newNode(200, 300, 30, 30);
-		// var link = newFoldLink(from, to, 'FoldLink');
-		// var link = newFoldLink(to, from, 'FoldLink');
+		var from = newNode(100, 200, 30, 30);
+		var to = newNode(200, 300, 30, 30);
+		var link = newFoldLink(from, to, 'FoldLink');
+		var link = newFoldLink(to, from, 'FoldLink');
 
-		var from = newNode(450, 250, 30, 30);
-		var to = newNode(0, 0, 30, 30);
-		var link = newFlexionalLink(from, to, 'FlexLink1');
+		var from = newNode(100, 60, 30, 30);
+		var to = newNode(300, 60, 30, 30);
+		var link = newLink(from, to);
+		link.dragable = true
+		link.addEventListener('mousedrag', function (a) {
+			debugger
+			[this.nodeA, this.nodeZ].forEach(node => {
+				console.log(a.dy)
+				var b = node.x + a.dx,
+					c = node.y + a.dy;
+				node.setLocation(b, c)
+				// node.dispatchEvent("mousedrag", a)
+			})
 
-		var toSide = -1
-
-		to.mousedrag(e => {
-			if (toSide < 0 && (to.x + to.width > from.x)) {
-				toSide *= -1
-				switchDirection(link)
-			}
-			const path = link.path
-			link.offsetGap = Math.round(Math.abs(path[0].x - path[3].x) / 2)
 		})
 
-		to.mousemove(e => {
-			const path = link.path
-			link.offsetGap = Math.round(Math.abs(path[0].x - path[3].x) / 2)
-		})
+		// var from = newNode(450, 250, 30, 30);
+		// var to = newNode(0, 0, 30, 30);
+		// var link = newFlexionalLink(from, to, 'FlexLink1');
+
+		// var toSide = -1
+
+		// to.mousedrag(e => {
+		// 	if (toSide < 0 && (to.x + to.width > from.x)) {
+		// 		toSide *= -1
+		// 		switchDirection(link)
+		// 	}
+		// 	const path = link.path
+		// 	link.offsetGap = Math.round(Math.abs(path[0].x - path[3].x) / 2)
+		// })
+
+		// to.mousemove(e => {
+		// 	const path = link.path
+		// 	link.offsetGap = Math.round(Math.abs(path[0].x - path[3].x) / 2)
+		// })
 
 	</script>
 </body>

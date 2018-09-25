@@ -105,7 +105,7 @@ function drawLink(data) {
   var startNode = drawLinkPoint(path[0], nodes[0])
   var endNode = drawLinkPoint(path[1], nodes[1])
 
-  newFoldLink(startNode, endNode, '123', 'vertical', 3)
+  newFoldLink(startNode, endNode, '123', 'vertical')
 }
 
 function setLoction(x, y) {
@@ -151,7 +151,6 @@ function setLoction(x, y) {
     nx = x
     ny = minYB
   } else {
-    debugger
     nx = minXB
     ny = y
   }
