@@ -1,9 +1,11 @@
+/**
+ * jtopo and element class
+ */
 (function (window) {
 	function noop() {
 	}
 
 	function Element() {
-
 	}
 
 	Element.prototype.initialize = function () {
@@ -149,6 +151,9 @@
 	window.JTopo = JTopo
 }(window));
 
+/**
+ * MessageBus and tools
+ */
 (function (JTopo) {
 
 	function MessageBus(a) {
@@ -474,6 +479,9 @@
 	};
 }(JTopo));
 
+/**
+ * Stage
+ */
 (function (JTopo) {
 	function createEagleEye(a) {
 		return {
@@ -580,7 +588,6 @@
 			}
 		}
 	}
-
 
 	function Stage(c) {
 
@@ -928,6 +935,9 @@
 	JTopo.Stage = Stage
 }(JTopo));
 
+/**
+ * Scene 
+ */
 (function (JTopo) {
 	function Scene(c) {
 		function d(a, b, c, d) {
@@ -1462,349 +1472,12 @@
 	JTopo.Scene = Scene
 }(JTopo));
 
+/**
+ * base elements
+ */
 (function (JTopo) {
 	function DisplayElement() {
-		this.initialize = function () {
-			DisplayElement.super.initialize.apply(this, arguments),
-				this.elementType = "displayElement",
-				this.x = 0,
-				this.y = 0,
-				this.width = 32,
-				this.height = 32,
-				this.visible = !0,
-				this.alpha = 1,
-				this.rotate = 0,
-				this.scaleX = 1,
-				this.scaleY = 1,
-				this.strokeColor = "22,124,255",
-				this.borderColor = "22,124,255",
-				this.fillColor = "22,124,255",
-				this.shadow = !1,
-				this.shadowBlur = 5,
-				this.shadowColor = "rgba(0,0,0,0.5)",
-				this.shadowOffsetX = 3,
-				this.shadowOffsetY = 6,
-				this.transformAble = !1,
-				this.zIndex = 0;
-			var a = "x,y,width,height,visible,alpha,rotate,scaleX,scaleY,strokeColor,fillColor,shadow,shadowColor,shadowOffsetX,shadowOffsetY,transformAble,zIndex".split(",");
-			this.serializedProperties = this.serializedProperties.concat(a)
-		},
-			this.initialize(),
-			this.paint = function (a) {
-				a.beginPath(),
-					a.fillStyle = "rgba(" + this.fillColor + "," + this.alpha + ")",
-					a.rect(-this.width / 2, -this.height / 2, this.width, this.height),
-					a.fill(),
-					a.stroke(),
-					a.closePath()
-			},
-			this.getLocation = function () {
-				return {
-					x: this.x,
-					y: this.y
-				}
-			},
-			this.setLocation = function (a, b) {
-				return this.x = a,
-					this.y = b,
-					this
-			},
-			this.getCenterLocation = function () {
-				return {
-					x: this.x + this.width / 2,
-					y: this.y + this.height / 2
-				}
-			},
-			this.setCenterLocation = function (a, b) {
-				return this.x = a - this.width / 2,
-					this.y = b - this.height / 2,
-					this
-			},
-			this.getSize = function () {
-				return {
-					width: this.width,
-					height: this.heith
-				}
-			},
-			this.setSize = function (a, b) {
-				return this.width = a,
-					this.height = b,
-					this
-			},
-			this.getBound = function () {
-				return {
-					left: this.x,
-					top: this.y,
-					right: this.x + this.width,
-					bottom: this.y + this.height,
-					width: this.width,
-					height: this.height
-				}
-			},
-			this.setBound = function (a, b, c, d) {
-				return this.setLocation(a, b),
-					this.setSize(c, d),
-					this
-			},
-			this.getDisplayBound = function () {
-				return {
-					left: this.x,
-					top: this.y,
-					right: this.x + this.width * this.scaleX,
-					bottom: this.y + this.height * this.scaleY
-				}
-			},
-			this.getDisplaySize = function () {
-				return {
-					width: this.width * this.scaleX,
-					height: this.height * this.scaleY
-				}
-			},
-			this.getPosition = function (a) {
-				var b,
-					c = this.getBound();
-				return "Top_Left" == a ? b = {
-					x: c.left,
-					y: c.top
-				}
-					: "Top_Center" == a ? b = {
-						x: this.cx,
-						y: c.top
-					}
-						: "Top_Right" == a ? b = {
-							x: c.right,
-							y: c.top
-						}
-							: "Middle_Left" == a ? b = {
-								x: c.left,
-								y: this.cy
-							}
-								: "Middle_Center" == a ? b = {
-									x: this.cx,
-									y: this.cy
-								}
-									: "Middle_Right" == a ? b = {
-										x: c.right,
-										y: this.cy
-									}
-										: "Bottom_Left" == a ? b = {
-											x: c.left,
-											y: c.bottom
-										}
-											: "Bottom_Center" == a ? b = {
-												x: this.cx,
-												y: c.bottom
-											}
-												: "Bottom_Right" == a && (b = {
-													x: c.right,
-													y: c.bottom
-												}),
-					b
-			}
-	}
-	function InteractiveElement() {
-		this.initialize = function () {
-			InteractiveElement.super.initialize.apply(this, arguments),
-				this.elementType = "interactiveElement",
-				this.dragable = !1,
-				this.selected = !1,
-				this.showSelected = !0,
-				this.selectedLocation = null,
-				this.isMouseOver = !1;
-			var a = "dragable,selected,showSelected,isMouseOver".split(",");
-			this.serializedProperties = this.serializedProperties.concat(a)
-		},
-			this.initialize(),
-			this.paintSelected = function (a) {
-				0 != this.showSelected && (a.save(), a.beginPath(), a.strokeStyle = "rgba(168,202,255, 0.9)", a.fillStyle = "rgba(168,202,236,0.7)", a.rect(-this.width / 2 - 3, -this.height / 2 - 3, this.width + 6, this.height + 6), a.fill(), a.stroke(), a.closePath(), a.restore())
-			},
-			this.paintMouseover = function (a) {
-				return this.paintSelected(a)
-			},
-			this.isInBound = function (a, b) {
-				return a > this.x && a < this.x + this.width * Math.abs(this.scaleX) && b > this.y && b < this.y + this.height * Math.abs(this.scaleY)
-			},
-			this.selectedHandler = function () {
-				this.selected = !0,
-					this.selectedLocation = {
-						x: this.x,
-						y: this.y
-					}
-			},
-			this.unselectedHandler = function () {
-				this.selected = !1,
-					this.selectedLocation = null
-			},
-			this.dbclickHandler = function (a) {
-				this.dispatchEvent("dbclick", a)
-			},
-			this.clickHandler = function (a) {
-				this.dispatchEvent("click", a)
-			},
-			this.mousedownHander = function (a) {
-				this.dispatchEvent("mousedown", a)
-			},
-			this.mouseupHandler = function (a) {
-				this.dispatchEvent("mouseup", a)
-			},
-			this.mouseoverHandler = function (a) {
-				this.isMouseOver = !0,
-					this.dispatchEvent("mouseover", a)
-			},
-			this.mousemoveHandler = function (a) {
-				this.dispatchEvent("mousemove", a)
-			},
-			this.mouseoutHandler = function (a) {
-				this.isMouseOver = !1,
-					this.dispatchEvent("mouseout", a)
-			},
-			this.mousedragHandler = function (a) {
-				var b = this.selectedLocation.x + a.dx,
-					c = this.selectedLocation.y + a.dy;
-				this.setLocation(b, c),
-					this.dispatchEvent("mousedrag", a)
-			},
-			this.addEventListener = function (b, c) {
-				var d = this,
-					e = function (a) {
-						c.call(d, a)
-					};
-				return this.messageBus || (this.messageBus = new a.util.MessageBus),
-					this.messageBus.subscribe(b, e),
-					this
-			},
-			this.dispatchEvent = function (a, b) {
-				return this.messageBus ? (this.messageBus.publish(a, b), this) : null
-			},
-			this.removeEventListener = function (a) {
-				this.messageBus.unsubscribe(a)
-			},
-			this.removeAllEventListener = function () {
-				this.messageBus = new a.util.MessageBus
-			};
-		var b = "click,dbclick,mousedown,mouseup,mouseover,mouseout,mousemove,mousedrag,touchstart,touchmove,touchend".split(","),
-			d = this;
-		b.forEach(function (a) {
-			d[a] = function (b) {
-				null != b ? this.addEventListener(a, b) : this.dispatchEvent(a)
-			}
-		})
-	}
-	function EditableElement() {
-		this.initialize = function () {
-			EditableElement.super.initialize.apply(this, arguments),
-				// EditableElement.prototype.initialize.apply(this, arguments),
-				this.editAble = !1,
-				this.selectedPoint = null
-		},
-			this.getCtrlPosition = function (a) {
-				var b = 5,
-					c = 5,
-					d = this.getPosition(a);
-				return {
-					left: d.x - b,
-					top: d.y - c,
-					right: d.x + b,
-					bottom: d.y + c
-				}
-			},
-			this.selectedHandler = function (b) {
-				EditableElement.prototype.selectedHandler.apply(this, arguments),
-					this.selectedSize = {
-						width: this.width,
-						height: this.height
-					},
-					b.scene.mode == JTopo.SceneMode.edit && (this.editAble = !0)
-			},
-			this.unselectedHandler = function () {
-				EditableElement.prototype.unselectedHandler.apply(this, arguments),
-					this.selectedSize = null,
-					this.editAble = !1
-			};
-		var b = ["Top_Left", "Top_Center", "Top_Right", "Middle_Left", "Middle_Right", "Bottom_Left", "Bottom_Center", "Bottom_Right"];
-		this.paintCtrl = function (a) {
-			if (0 != this.editAble) {
-				a.save();
-				for (var c = 0; c < b.length; c++) {
-					var d = this.getCtrlPosition(b[c]);
-					d.left -= this.cx,
-						d.right -= this.cx,
-						d.top -= this.cy,
-						d.bottom -= this.cy;
-					var e = d.right - d.left,
-						f = d.bottom - d.top;
-					a.beginPath(),
-						a.strokeStyle = "rgba(0,0,0,0.8)",
-						a.rect(d.left, d.top, e, f),
-						a.stroke(),
-						a.closePath(),
-						a.beginPath(),
-						a.strokeStyle = "rgba(255,255,255,0.3)",
-						a.rect(d.left + 1, d.top + 1, e - 2, f - 2),
-						a.stroke(),
-						a.closePath()
-				}
-				a.restore()
-			}
-		},
-			this.isInBound = function (a, c) {
-				if (this.selectedPoint = null, 1 == this.editAble)
-					for (var e = 0; e < b.length; e++) {
-						var f = this.getCtrlPosition(b[e]);
-						if (a > f.left && a < f.right && c > f.top && c < f.bottom)
-							return this.selectedPoint = b[e], !0
-					}
-				return EditableElement.prototype.isInBound.apply(this, arguments)
-			},
-			this.mousedragHandler = function (a) {
-				if (null == this.selectedPoint) {
-					var b = this.selectedLocation.x + a.dx,
-						c = this.selectedLocation.y + a.dy;
-					this.setLocation(b, c),
-						this.dispatchEvent("mousedrag", a)
-				} else {
-					if ("Top_Left" == this.selectedPoint) {
-						var d = this.selectedSize.width - a.dx,
-							e = this.selectedSize.height - a.dy,
-							b = this.selectedLocation.x + a.dx,
-							c = this.selectedLocation.y + a.dy;
-						b < this.x + this.width && (this.x = b, this.width = d),
-							c < this.y + this.height && (this.y = c, this.height = e)
-					} else if ("Top_Center" == this.selectedPoint) {
-						var e = this.selectedSize.height - a.dy,
-							c = this.selectedLocation.y + a.dy;
-						c < this.y + this.height && (this.y = c, this.height = e)
-					} else if ("Top_Right" == this.selectedPoint) {
-						var d = this.selectedSize.width + a.dx,
-							c = this.selectedLocation.y + a.dy;
-						c < this.y + this.height && (this.y = c, this.height = this.selectedSize.height - a.dy),
-							d > 1 && (this.width = d)
-					} else if ("Middle_Left" == this.selectedPoint) {
-						var d = this.selectedSize.width - a.dx,
-							b = this.selectedLocation.x + a.dx;
-						b < this.x + this.width && (this.x = b),
-							d > 1 && (this.width = d)
-					} else if ("Middle_Right" == this.selectedPoint) {
-						var d = this.selectedSize.width + a.dx;
-						d > 1 && (this.width = d)
-					} else if ("Bottom_Left" == this.selectedPoint) {
-						var d = this.selectedSize.width - a.dx,
-							b = this.selectedLocation.x + a.dx;
-						d > 1 && (this.x = b, this.width = d);
-						var e = this.selectedSize.height + a.dy;
-						e > 1 && (this.height = e)
-					} else if ("Bottom_Center" == this.selectedPoint) {
-						var e = this.selectedSize.height + a.dy;
-						e > 1 && (this.height = e)
-					} else if ("Bottom_Right" == this.selectedPoint) {
-						var d = this.selectedSize.width + a.dx;
-						d > 1 && (this.width = d);
-						var e = this.selectedSize.height + a.dy;
-						e > 1 && (this.height = e)
-					}
-					this.dispatchEvent("resize", a)
-				}
-			}
+		this.initialize()
 	}
 
 	JTopo.extend(DisplayElement, JTopo.Element)
@@ -1828,195 +1501,566 @@
 		}
 	})
 
+	DisplayElement.prototype.initialize = function () {
+		DisplayElement.super.initialize.apply(this, arguments),
+			this.elementType = "displayElement",
+			this.x = 0,
+			this.y = 0,
+			this.width = 32,
+			this.height = 32,
+			this.visible = !0,
+			this.alpha = 1,
+			this.rotate = 0,
+			this.scaleX = 1,
+			this.scaleY = 1,
+			this.strokeColor = "22,124,255",
+			this.borderColor = "22,124,255",
+			this.fillColor = "22,124,255",
+			this.shadow = !1,
+			this.shadowBlur = 5,
+			this.shadowColor = "rgba(0,0,0,0.5)",
+			this.shadowOffsetX = 3,
+			this.shadowOffsetY = 6,
+			this.transformAble = !1,
+			this.zIndex = 0;
+		var a = "x,y,width,height,visible,alpha,rotate,scaleX,scaleY,strokeColor,fillColor,shadow,shadowColor,shadowOffsetX,shadowOffsetY,transformAble,zIndex".split(",");
+		this.serializedProperties = this.serializedProperties.concat(a)
+	}
+	DisplayElement.prototype.paint = function (a) {
+		a.beginPath(),
+			a.fillStyle = "rgba(" + this.fillColor + "," + this.alpha + ")",
+			a.rect(-this.width / 2, -this.height / 2, this.width, this.height),
+			a.fill(),
+			a.stroke(),
+			a.closePath()
+	}
+	DisplayElement.prototype.getLocation = function () {
+		return {
+			x: this.x,
+			y: this.y
+		}
+	}
+	DisplayElement.prototype.setLocation = function (a, b) {
+		return this.x = a,
+			this.y = b,
+			this
+	}
+	DisplayElement.prototype.getCenterLocation = function () {
+		return {
+			x: this.x + this.width / 2,
+			y: this.y + this.height / 2
+		}
+	}
+	DisplayElement.prototype.setCenterLocation = function (a, b) {
+		return this.x = a - this.width / 2,
+			this.y = b - this.height / 2,
+			this
+	}
+	DisplayElement.prototype.getSize = function () {
+		return {
+			width: this.width,
+			height: this.heith
+		}
+	}
+	DisplayElement.prototype.setSize = function (a, b) {
+		return this.width = a,
+			this.height = b,
+			this
+	}
+	DisplayElement.prototype.getBound = function () {
+		return {
+			left: this.x,
+			top: this.y,
+			right: this.x + this.width,
+			bottom: this.y + this.height,
+			width: this.width,
+			height: this.height
+		}
+	}
+	DisplayElement.prototype.setBound = function (a, b, c, d) {
+		return this.setLocation(a, b),
+			this.setSize(c, d),
+			this
+	}
+	DisplayElement.prototype.getDisplayBound = function () {
+		return {
+			left: this.x,
+			top: this.y,
+			right: this.x + this.width * this.scaleX,
+			bottom: this.y + this.height * this.scaleY
+		}
+	}
+	DisplayElement.prototype.getDisplaySize = function () {
+		return {
+			width: this.width * this.scaleX,
+			height: this.height * this.scaleY
+		}
+	}
+	DisplayElement.prototype.getPosition = function (a) {
+		var b,
+			c = this.getBound();
+		return "Top_Left" == a ? b = {
+			x: c.left,
+			y: c.top
+		}
+			: "Top_Center" == a ? b = {
+				x: this.cx,
+				y: c.top
+			}
+				: "Top_Right" == a ? b = {
+					x: c.right,
+					y: c.top
+				}
+					: "Middle_Left" == a ? b = {
+						x: c.left,
+						y: this.cy
+					}
+						: "Middle_Center" == a ? b = {
+							x: this.cx,
+							y: this.cy
+						}
+							: "Middle_Right" == a ? b = {
+								x: c.right,
+								y: this.cy
+							}
+								: "Bottom_Left" == a ? b = {
+									x: c.left,
+									y: c.bottom
+								}
+									: "Bottom_Center" == a ? b = {
+										x: this.cx,
+										y: c.bottom
+									}
+										: "Bottom_Right" == a && (b = {
+											x: c.right,
+											y: c.bottom
+										}),
+			b
+	}
+
+
+	function InteractiveElement() {
+		this.initialize()
+		var b = "click,dbclick,mousedown,mouseup,mouseover,mouseout,mousemove,mousedrag,touchstart,touchmove,touchend".split(","),
+			d = this;
+		b.forEach(function (a) {
+			d[a] = function (b) {
+				null != b ? this.addEventListener(a, b) : this.dispatchEvent(a)
+			}
+		})
+	}
+
 	JTopo.extend(InteractiveElement, DisplayElement)
+
+	InteractiveElement.prototype.initialize = function () {
+		InteractiveElement.super.initialize.apply(this, arguments),
+			this.elementType = "interactiveElement",
+			this.dragable = !1,
+			this.selected = !1,
+			this.showSelected = !0,
+			this.selectedLocation = null,
+			this.isMouseOver = !1;
+		var a = "dragable,selected,showSelected,isMouseOver".split(",");
+		this.serializedProperties = this.serializedProperties.concat(a)
+	}
+	InteractiveElement.prototype.paintSelected = function (a) {
+		0 != this.showSelected && (a.save(), a.beginPath(), a.strokeStyle = "rgba(168,202,255, 0.9)", a.fillStyle = "rgba(168,202,236,0.7)", a.rect(-this.width / 2 - 3, -this.height / 2 - 3, this.width + 6, this.height + 6), a.fill(), a.stroke(), a.closePath(), a.restore())
+	}
+	InteractiveElement.prototype.paintMouseover = function (a) {
+		return this.paintSelected(a)
+	}
+	InteractiveElement.prototype.isInBound = function (a, b) {
+		return a > this.x && a < this.x + this.width * Math.abs(this.scaleX) && b > this.y && b < this.y + this.height * Math.abs(this.scaleY)
+	}
+	InteractiveElement.prototype.selectedHandler = function () {
+		this.selected = !0,
+			this.selectedLocation = {
+				x: this.x,
+				y: this.y
+			}
+	}
+	InteractiveElement.prototype.unselectedHandler = function () {
+		this.selected = !1,
+			this.selectedLocation = null
+	}
+	InteractiveElement.prototype.dbclickHandler = function (a) {
+		this.dispatchEvent("dbclick", a)
+	}
+	InteractiveElement.prototype.clickHandler = function (a) {
+		this.dispatchEvent("click", a)
+	}
+	InteractiveElement.prototype.mousedownHander = function (a) {
+		this.dispatchEvent("mousedown", a)
+	}
+	InteractiveElement.prototype.mouseupHandler = function (a) {
+		this.dispatchEvent("mouseup", a)
+	}
+	InteractiveElement.prototype.mouseoverHandler = function (a) {
+		this.isMouseOver = !0,
+			this.dispatchEvent("mouseover", a)
+	}
+	InteractiveElement.prototype.mousemoveHandler = function (a) {
+		this.dispatchEvent("mousemove", a)
+	}
+	InteractiveElement.prototype.mouseoutHandler = function (a) {
+		this.isMouseOver = !1,
+			this.dispatchEvent("mouseout", a)
+	}
+	InteractiveElement.prototype.mousedragHandler = function (a) {
+		var b = this.selectedLocation.x + a.dx,
+			c = this.selectedLocation.y + a.dy;
+		this.setLocation(b, c),
+			this.dispatchEvent("mousedrag", a)
+	}
+	InteractiveElement.prototype.addEventListener = function (b, c) {
+		var d = this,
+			e = function (a) {
+				c.call(d, a)
+			};
+		return this.messageBus || (this.messageBus = new a.util.MessageBus),
+			this.messageBus.subscribe(b, e),
+			this
+	}
+	InteractiveElement.prototype.dispatchEvent = function (a, b) {
+		return this.messageBus ? (this.messageBus.publish(a, b), this) : null
+	}
+	InteractiveElement.prototype.removeEventListener = function (a) {
+		this.messageBus.unsubscribe(a)
+	}
+	InteractiveElement.prototype.removeAllEventListener = function () {
+		this.messageBus = new a.util.MessageBus
+	};
+
+	function EditableElement() {
+
+	}
+
 	JTopo.extend(EditableElement, InteractiveElement)
 
+	EditableElement.prototype.initialize = function () {
+		EditableElement.super.initialize.apply(this, arguments),
+			// EditableElement.prototype.initialize.apply(this, arguments),
+			this.editAble = !1,
+			this.selectedPoint = null
+	}
+	EditableElement.prototype.getCtrlPosition = function (a) {
+		var b = 5,
+			c = 5,
+			d = this.getPosition(a);
+		return {
+			left: d.x - b,
+			top: d.y - c,
+			right: d.x + b,
+			bottom: d.y + c
+		}
+	}
+	EditableElement.prototype.selectedHandler = function (b) {
+		EditableElement.super.selectedHandler.apply(this, arguments),
+			this.selectedSize = {
+				width: this.width,
+				height: this.height
+			},
+			b.scene.mode == JTopo.SceneMode.edit && (this.editAble = !0)
+	}
+	EditableElement.prototype.unselectedHandler = function () {
+		EditableElement.super.unselectedHandler.apply(this, arguments),
+			this.selectedSize = null,
+			this.editAble = !1
+	};
+
+	var CTRL_POSTIONS = ["Top_Left", "Top_Center", "Top_Right", "Middle_Left", "Middle_Right", "Bottom_Left", "Bottom_Center", "Bottom_Right"];
+
+	EditableElement.prototype.paintCtrl = function (a) {
+		if (0 != this.editAble) {
+			a.save();
+			for (var c = 0; c < CTRL_POSTIONS.length; c++) {
+				var d = this.getCtrlPosition(CTRL_POSTIONS[c]);
+				d.left -= this.cx,
+					d.right -= this.cx,
+					d.top -= this.cy,
+					d.bottom -= this.cy;
+				var e = d.right - d.left,
+					f = d.bottom - d.top;
+				a.beginPath(),
+					a.strokeStyle = "rgba(0,0,0,0.8)",
+					a.rect(d.left, d.top, e, f),
+					a.stroke(),
+					a.closePath(),
+					a.beginPath(),
+					a.strokeStyle = "rgba(255,255,255,0.3)",
+					a.rect(d.left + 1, d.top + 1, e - 2, f - 2),
+					a.stroke(),
+					a.closePath()
+			}
+			a.restore()
+		}
+	}
+	EditableElement.prototype.isInBound = function (a, c) {
+		if (this.selectedPoint = null, 1 == this.editAble)
+			for (var e = 0; e < CTRL_POSTIONS.length; e++) {
+				var f = this.getCtrlPosition(CTRL_POSTIONS[e]);
+				if (a > f.left && a < f.right && c > f.top && c < f.bottom)
+					return this.selectedPoint = CTRL_POSTIONS[e], !0
+			}
+		return EditableElement.super.isInBound.apply(this, arguments)
+	}
+	EditableElement.prototype.mousedragHandler = function (a) {
+		if (null == this.selectedPoint) {
+			var b = this.selectedLocation.x + a.dx,
+				c = this.selectedLocation.y + a.dy;
+			this.setLocation(b, c),
+				this.dispatchEvent("mousedrag", a)
+		} else {
+			if ("Top_Left" == this.selectedPoint) {
+				var d = this.selectedSize.width - a.dx,
+					e = this.selectedSize.height - a.dy,
+					b = this.selectedLocation.x + a.dx,
+					c = this.selectedLocation.y + a.dy;
+				b < this.x + this.width && (this.x = b, this.width = d),
+					c < this.y + this.height && (this.y = c, this.height = e)
+			} else if ("Top_Center" == this.selectedPoint) {
+				var e = this.selectedSize.height - a.dy,
+					c = this.selectedLocation.y + a.dy;
+				c < this.y + this.height && (this.y = c, this.height = e)
+			} else if ("Top_Right" == this.selectedPoint) {
+				var d = this.selectedSize.width + a.dx,
+					c = this.selectedLocation.y + a.dy;
+				c < this.y + this.height && (this.y = c, this.height = this.selectedSize.height - a.dy),
+					d > 1 && (this.width = d)
+			} else if ("Middle_Left" == this.selectedPoint) {
+				var d = this.selectedSize.width - a.dx,
+					b = this.selectedLocation.x + a.dx;
+				b < this.x + this.width && (this.x = b),
+					d > 1 && (this.width = d)
+			} else if ("Middle_Right" == this.selectedPoint) {
+				var d = this.selectedSize.width + a.dx;
+				d > 1 && (this.width = d)
+			} else if ("Bottom_Left" == this.selectedPoint) {
+				var d = this.selectedSize.width - a.dx,
+					b = this.selectedLocation.x + a.dx;
+				d > 1 && (this.x = b, this.width = d);
+				var e = this.selectedSize.height + a.dy;
+				e > 1 && (this.height = e)
+			} else if ("Bottom_Center" == this.selectedPoint) {
+				var e = this.selectedSize.height + a.dy;
+				e > 1 && (this.height = e)
+			} else if ("Bottom_Right" == this.selectedPoint) {
+				var d = this.selectedSize.width + a.dx;
+				d > 1 && (this.width = d);
+				var e = this.selectedSize.height + a.dy;
+				e > 1 && (this.height = e)
+			}
+			this.dispatchEvent("resize", a)
+		}
+	}
 	JTopo.DisplayElement = DisplayElement
 	JTopo.InteractiveElement = InteractiveElement
 	JTopo.EditableElement = EditableElement
 }(JTopo));
 
+/**
+ * node elements
+ */
 (function (JTopo) {
-	function Node(c) {
-		this.initialize = function (c) {
-			Node.prototype.initialize.apply(this, arguments),
-				this.elementType = "node",
-				this.zIndex = JTopo.zIndex_Node,
-				this.text = c,
-				this.font = "12px Consolas",
-				this.fontColor = "255,255,255",
-				this.borderWidth = 0,
-				this.borderColor = "255,255,255",
-				this.borderRadius = null,
-				this.dragable = !0,
-				this.textPosition = "Bottom_Center",
-				this.textOffsetX = 0,
-				this.textOffsetY = 0,
-				this.transformAble = !0,
-				this.inLinks = null,
-				this.outLinks = null;
-			var d = "text,font,fontColor,textPosition,textOffsetX,textOffsetY,borderRadius".split(",");
-			this.serializedProperties = this.serializedProperties.concat(d)
-		},
-			this.initialize(c),
-			this.paint = function (a) {
-				if (this.image) {
-					var b = a.globalAlpha;
-					a.globalAlpha = this.alpha,
-						null != this.alarmImage && null != this.alarm ? a.drawImage(this.alarmImage, -this.width / 2, -this.height / 2, this.width, this.height) : a.drawImage(this.image, -this.width / 2, -this.height / 2, this.width, this.height),
-						a.globalAlpha = b
-				} else
-					a.beginPath(), a.fillStyle = "rgba(" + this.fillColor + "," + this.alpha + ")", null == this.borderRadius || 0 == this.borderRadius ? a.rect(-this.width / 2, -this.height / 2, this.width, this.height) : a.JTopoRoundRect(-this.width / 2, -this.height / 2, this.width, this.height, this.borderRadius), a.fill(), a.closePath();
-				this.paintText(a),
-					this.paintBorder(a),
-					this.paintCtrl(a),
-					this.paintAlarmText(a)
+	var Images = {}
+
+	function Node(text) {
+		this.initialize(text)
+	}
+
+	JTopo.extend(Node, JTopo.EditableElement)
+	Object.defineProperties(Node.prototype, {
+		alarmColor: {
+			get: function () {
+				return this._alarmColor
 			},
-			this.paintAlarmText = function (a) {
-				if (null != this.alarm && "" != this.alarm) {
-					var b = this.alarmColor || "255,0,0",
-						c = this.alarmAlpha || .5;
-					a.beginPath(),
-						a.font = this.alarmFont || "10px 微软雅黑";
-					var d = a.measureText(this.alarm).width + 6,
-						e = a.measureText("田").width + 6,
-						f = this.width / 2 - d / 2,
-						g = -this.height / 2 - e - 8;
-					a.strokeStyle = "rgba(" + b + ", " + c + ")",
-						a.fillStyle = "rgba(" + b + ", " + c + ")",
-						a.lineCap = "round",
-						a.lineWidth = 1,
-						a.moveTo(f, g),
-						a.lineTo(f + d, g),
-						a.lineTo(f + d, g + e),
-						a.lineTo(f + d / 2 + 6, g + e),
-						a.lineTo(f + d / 2, g + e + 8),
-						a.lineTo(f + d / 2 - 6, g + e),
-						a.lineTo(f, g + e),
-						a.lineTo(f, g),
-						a.fill(),
-						a.stroke(),
-						a.closePath(),
-						a.beginPath(),
-						a.strokeStyle = "rgba(" + this.fontColor + ", " + this.alpha + ")",
-						a.fillStyle = "rgba(" + this.fontColor + ", " + this.alpha + ")",
-						a.fillText(this.alarm, f + 2, g + e - 4),
-						a.closePath()
+			set: function (b) {
+				if (this._alarmColor = b, null != this.image) {
+					var c = JTopo.util.genImageAlarm(this.image, b);
+					c && (this.alarmImage = c)
 				}
-			},
-			this.paintText = function (a) {
-				var b = this.text;
-				if (null != b && "" != b) {
-					a.beginPath(),
-						a.font = this.font;
-					var c = a.measureText(b).width,
-						d = a.measureText("田").width;
-					a.fillStyle = "rgba(" + this.fontColor + ", " + this.alpha + ")";
-					var e = this.getTextPostion(this.textPosition, c, d);
-					a.fillText(b, e.x, e.y),
-						a.closePath()
+			}
+		}
+	})
+
+	Node.prototype.initialize = function (text) {
+		Node.super.initialize.apply(this, arguments),
+			this.elementType = "node",
+			this.zIndex = JTopo.zIndex_Node,
+			this.text = text,
+			this.font = "12px Consolas",
+			this.fontColor = "255,255,255",
+			this.borderWidth = 0,
+			this.borderColor = "255,255,255",
+			this.borderRadius = null,
+			this.dragable = !0,
+			this.textPosition = "Bottom_Center",
+			this.textOffsetX = 0,
+			this.textOffsetY = 0,
+			this.transformAble = !0,
+			this.inLinks = null,
+			this.outLinks = null;
+		var d = "text,font,fontColor,textPosition,textOffsetX,textOffsetY,borderRadius".split(",");
+		this.serializedProperties = this.serializedProperties.concat(d)
+	}
+	Node.prototype.paint = function (a) {
+		if (this.image) {
+			var b = a.globalAlpha;
+			a.globalAlpha = this.alpha,
+				null != this.alarmImage && null != this.alarm ? a.drawImage(this.alarmImage, -this.width / 2, -this.height / 2, this.width, this.height) : a.drawImage(this.image, -this.width / 2, -this.height / 2, this.width, this.height),
+				a.globalAlpha = b
+		} else
+			a.beginPath(), a.fillStyle = "rgba(" + this.fillColor + "," + this.alpha + ")", null == this.borderRadius || 0 == this.borderRadius ? a.rect(-this.width / 2, -this.height / 2, this.width, this.height) : a.JTopoRoundRect(-this.width / 2, -this.height / 2, this.width, this.height, this.borderRadius), a.fill(), a.closePath();
+		this.paintText(a),
+			this.paintBorder(a),
+			this.paintCtrl(a),
+			this.paintAlarmText(a)
+	}
+	Node.prototype.paintAlarmText = function (a) {
+		if (null != this.alarm && "" != this.alarm) {
+			var b = this.alarmColor || "255,0,0",
+				c = this.alarmAlpha || .5;
+			a.beginPath(),
+				a.font = this.alarmFont || "10px 微软雅黑";
+			var d = a.measureText(this.alarm).width + 6,
+				e = a.measureText("田").width + 6,
+				f = this.width / 2 - d / 2,
+				g = -this.height / 2 - e - 8;
+			a.strokeStyle = "rgba(" + b + ", " + c + ")",
+				a.fillStyle = "rgba(" + b + ", " + c + ")",
+				a.lineCap = "round",
+				a.lineWidth = 1,
+				a.moveTo(f, g),
+				a.lineTo(f + d, g),
+				a.lineTo(f + d, g + e),
+				a.lineTo(f + d / 2 + 6, g + e),
+				a.lineTo(f + d / 2, g + e + 8),
+				a.lineTo(f + d / 2 - 6, g + e),
+				a.lineTo(f, g + e),
+				a.lineTo(f, g),
+				a.fill(),
+				a.stroke(),
+				a.closePath(),
+				a.beginPath(),
+				a.strokeStyle = "rgba(" + this.fontColor + ", " + this.alpha + ")",
+				a.fillStyle = "rgba(" + this.fontColor + ", " + this.alpha + ")",
+				a.fillText(this.alarm, f + 2, g + e - 4),
+				a.closePath()
+		}
+	}
+	Node.prototype.paintText = function (a) {
+		var b = this.text;
+		if (null != b && "" != b) {
+			a.beginPath(),
+				a.font = this.font;
+			var c = a.measureText(b).width,
+				d = a.measureText("田").width;
+			a.fillStyle = "rgba(" + this.fontColor + ", " + this.alpha + ")";
+			var e = this.getTextPostion(this.textPosition, c, d);
+			a.fillText(b, e.x, e.y),
+				a.closePath()
+		}
+	}
+	Node.prototype.paintBorder = function (a) {
+		if (0 != this.borderWidth) {
+			a.beginPath(),
+				a.lineWidth = this.borderWidth,
+				a.strokeStyle = "rgba(" + this.borderColor + "," + this.alpha + ")";
+			var b = this.borderWidth / 2;
+			null == this.borderRadius || 0 == this.borderRadius ? a.rect(-this.width / 2 - b, -this.height / 2 - b, this.width + this.borderWidth, this.height + this.borderWidth) : a.JTopoRoundRect(-this.width / 2 - b, -this.height / 2 - b, this.width + this.borderWidth, this.height + this.borderWidth, this.borderRadius),
+				a.stroke(),
+				a.closePath()
+		}
+	}
+	Node.prototype.getTextPostion = function (a, b, c) {
+		var d = null;
+		return null == a || "Bottom_Center" == a ? d = {
+			x: -this.width / 2 + (this.width - b) / 2,
+			y: this.height / 2 + c
+		}
+			: "Top_Center" == a ? d = {
+				x: -this.width / 2 + (this.width - b) / 2,
+				y: -this.height / 2 - c / 2
+			}
+				: "Top_Right" == a ? d = {
+					x: this.width / 2,
+					y: -this.height / 2 - c / 2
 				}
-			},
-			this.paintBorder = function (a) {
-				if (0 != this.borderWidth) {
-					a.beginPath(),
-						a.lineWidth = this.borderWidth,
-						a.strokeStyle = "rgba(" + this.borderColor + "," + this.alpha + ")";
-					var b = this.borderWidth / 2;
-					null == this.borderRadius || 0 == this.borderRadius ? a.rect(-this.width / 2 - b, -this.height / 2 - b, this.width + this.borderWidth, this.height + this.borderWidth) : a.JTopoRoundRect(-this.width / 2 - b, -this.height / 2 - b, this.width + this.borderWidth, this.height + this.borderWidth, this.borderRadius),
-						a.stroke(),
-						a.closePath()
-				}
-			},
-			this.getTextPostion = function (a, b, c) {
-				var d = null;
-				return null == a || "Bottom_Center" == a ? d = {
-					x: -this.width / 2 + (this.width - b) / 2,
-					y: this.height / 2 + c
-				}
-					: "Top_Center" == a ? d = {
-						x: -this.width / 2 + (this.width - b) / 2,
+					: "Top_Left" == a ? d = {
+						x: -this.width / 2 - b,
 						y: -this.height / 2 - c / 2
 					}
-						: "Top_Right" == a ? d = {
+						: "Bottom_Right" == a ? d = {
 							x: this.width / 2,
-							y: -this.height / 2 - c / 2
+							y: this.height / 2 + c
 						}
-							: "Top_Left" == a ? d = {
+							: "Bottom_Left" == a ? d = {
 								x: -this.width / 2 - b,
-								y: -this.height / 2 - c / 2
+								y: this.height / 2 + c
 							}
-								: "Bottom_Right" == a ? d = {
-									x: this.width / 2,
-									y: this.height / 2 + c
+								: "Middle_Center" == a ? d = {
+									x: -this.width / 2 + (this.width - b) / 2,
+									y: c / 2
 								}
-									: "Bottom_Left" == a ? d = {
-										x: -this.width / 2 - b,
-										y: this.height / 2 + c
+									: "Middle_Right" == a ? d = {
+										x: this.width / 2,
+										y: c / 2
 									}
-										: "Middle_Center" == a ? d = {
-											x: -this.width / 2 + (this.width - b) / 2,
+										: "Middle_Left" == a && (d = {
+											x: -this.width / 2 - b,
 											y: c / 2
-										}
-											: "Middle_Right" == a ? d = {
-												x: this.width / 2,
-												y: c / 2
-											}
-												: "Middle_Left" == a && (d = {
-													x: -this.width / 2 - b,
-													y: c / 2
-												}),
-					null != this.textOffsetX && (d.x += this.textOffsetX),
-					null != this.textOffsetY && (d.y += this.textOffsetY),
-					d
-			},
-			this.setImage = function (a, b) {
-				if (null == a)
-					throw new Error("Node.setImage(): 参数Image对象为空!");
-				var c = this;
-				if ("string" == typeof a) {
-					var d = j[a];
-					null == d ? (d = new Image, d.src = a, d.onload = function () {
-						j[a] = d,
-							1 == b && c.setSize(d.width, d.height),
-							c.image = d,
-							c.alarmColor = null == c.alarmColor ? "255,0,0" : c.alarmColor
-					}) : (b && this.setSize(d.width, d.height), c.image = d, c.alarmColor = null == c.alarmColor ? "255,0,0" : c.alarmColor)
-				} else
-					this.image = a, c.alarmColor = null == c.alarmColor ? "255,0,0" : c.alarmColor, 1 == b && this.setSize(a.width, a.height)
-			},
-			this.removeHandler = function (a) {
-				var b = this;
-				this.outLinks && (this.outLinks.forEach(function (c) {
-					c.nodeA === b && a.remove(c)
-				}), this.outLinks = null),
-					this.inLinks && (this.inLinks.forEach(function (c) {
-						c.nodeZ === b && a.remove(c)
-					}), this.inLinks = null)
-			}
+										}),
+			null != this.textOffsetX && (d.x += this.textOffsetX),
+			null != this.textOffsetY && (d.y += this.textOffsetY),
+			d
 	}
-	// function Node() {
-	// 	debugger
-	// 	Node.prototype.initialize.apply(this, arguments)
-	// }
-	function TextNode(a) {
-		this.initialize(),
-			this.text = a,
-			this.elementType = "TextNode",
-			this.paint = function (a) {
-				a.beginPath(),
-					a.font = this.font,
-					this.width = a.measureText(this.text).width,
-					this.height = a.measureText("田").width,
-					a.strokeStyle = "rgba(" + this.fontColor + ", " + this.alpha + ")",
-					a.fillStyle = "rgba(" + this.fontColor + ", " + this.alpha + ")",
-					a.fillText(this.text, -this.width / 2, this.height / 2),
-					a.closePath(),
-					this.paintBorder(a),
-					this.paintCtrl(a),
-					this.paintAlarmText(a)
-			}
+	Node.prototype.setImage = function (a, b) {
+		if (null == a)
+			throw new Error("Node.setImage(): 参数Image对象为空!");
+		var c = this;
+		if ("string" == typeof a) {
+			var d = Images[a];
+			null == d ? (d = new Image, d.src = a, d.onload = function () {
+				Images[a] = d,
+					1 == b && c.setSize(d.width, d.height),
+					c.image = d,
+					c.alarmColor = null == c.alarmColor ? "255,0,0" : c.alarmColor
+			}) : (b && this.setSize(d.width, d.height), c.image = d, c.alarmColor = null == c.alarmColor ? "255,0,0" : c.alarmColor)
+		} else
+			this.image = a, c.alarmColor = null == c.alarmColor ? "255,0,0" : c.alarmColor, 1 == b && this.setSize(a.width, a.height)
 	}
+	Node.prototype.removeHandler = function (a) {
+		var b = this;
+		this.outLinks && (this.outLinks.forEach(function (c) {
+			c.nodeA === b && a.remove(c)
+		}), this.outLinks = null),
+			this.inLinks && (this.inLinks.forEach(function (c) {
+				c.nodeZ === b && a.remove(c)
+			}), this.inLinks = null)
+	}
+
+	function TextNode(text) {
+		this.initialize()
+		this.text = text
+		this.elementType = "TextNode"
+	}
+
+	JTopo.extend(TextNode, Node)
+
+	TextNode.prototype.paint = function (a) {
+		a.beginPath(),
+			a.font = this.font,
+			this.width = a.measureText(this.text).width,
+			this.height = a.measureText("田").width,
+			a.strokeStyle = "rgba(" + this.fontColor + ", " + this.alpha + ")",
+			a.fillStyle = "rgba(" + this.fontColor + ", " + this.alpha + ")",
+			a.fillText(this.text, -this.width / 2, this.height / 2),
+			a.closePath(),
+			this.paintBorder(a),
+			this.paintCtrl(a),
+			this.paintAlarmText(a)
+	}
+
 	function LinkNode(a, b, c) {
 		this.initialize(),
 			this.text = a,
@@ -2025,19 +2069,6 @@
 			this.elementType = "LinkNode",
 			this.isVisited = !1,
 			this.visitedColor = null,
-			this.paint = function (a) {
-				a.beginPath(),
-					a.font = this.font,
-					this.width = a.measureText(this.text).width,
-					this.height = a.measureText("田").width,
-					this.isVisited && null != this.visitedColor ? (a.strokeStyle = "rgba(" + this.visitedColor + ", " + this.alpha + ")", a.fillStyle = "rgba(" + this.visitedColor + ", " + this.alpha + ")") : (a.strokeStyle = "rgba(" + this.fontColor + ", " + this.alpha + ")", a.fillStyle = "rgba(" + this.fontColor + ", " + this.alpha + ")"),
-					a.fillText(this.text, -this.width / 2, this.height / 2),
-					this.isMouseOver && (a.moveTo(-this.width / 2, this.height), a.lineTo(this.width / 2, this.height), a.stroke()),
-					a.closePath(),
-					this.paintBorder(a),
-					this.paintCtrl(a),
-					this.paintAlarmText(a)
-			},
 			this.mousemove(function () {
 				var a = document.getElementsByTagName("canvas");
 				if (a && a.length > 0)
@@ -2055,37 +2086,92 @@
 					this.isVisited = !0
 			})
 	}
+
+	JTopo.extend(LinkNode, TextNode)
+	LinkNode.prototype.paint = function (a) {
+		a.beginPath(),
+			a.font = this.font,
+			this.width = a.measureText(this.text).width,
+			this.height = a.measureText("田").width,
+			this.isVisited && null != this.visitedColor ? (a.strokeStyle = "rgba(" + this.visitedColor + ", " + this.alpha + ")", a.fillStyle = "rgba(" + this.visitedColor + ", " + this.alpha + ")") : (a.strokeStyle = "rgba(" + this.fontColor + ", " + this.alpha + ")", a.fillStyle = "rgba(" + this.fontColor + ", " + this.alpha + ")"),
+			a.fillText(this.text, -this.width / 2, this.height / 2),
+			this.isMouseOver && (a.moveTo(-this.width / 2, this.height), a.lineTo(this.width / 2, this.height), a.stroke()),
+			a.closePath(),
+			this.paintBorder(a),
+			this.paintCtrl(a),
+			this.paintAlarmText(a)
+	}
+
+
 	function CircleNode(a) {
 		this.initialize(arguments),
 			this._radius = 20,
 			this.beginDegree = 0,
 			this.endDegree = 2 * Math.PI,
-			this.text = a,
-			this.paint = function (a) {
-				a.save(),
-					a.beginPath(),
-					a.fillStyle = "rgba(" + this.fillColor + "," + this.alpha + ")",
-					a.arc(0, 0, this.radius, this.beginDegree, this.endDegree, !0),
-					a.fill(),
-					a.closePath(),
-					a.restore(),
-					this.paintText(a),
-					this.paintBorder(a),
-					this.paintCtrl(a),
-					this.paintAlarmText(a)
-			},
-			this.paintSelected = function (a) {
-				a.save(),
-					a.beginPath(),
-					a.strokeStyle = "rgba(168,202,255, 0.9)",
-					a.fillStyle = "rgba(168,202,236,0.7)",
-					a.arc(0, 0, this.radius + 3, this.beginDegree, this.endDegree, !0),
-					a.fill(),
-					a.stroke(),
-					a.closePath(),
-					a.restore()
-			}
+			this.text = a
 	}
+
+	JTopo.extend(CircleNode, Node)
+
+	Object.defineProperties(CircleNode.prototype, {
+		radius: {
+			get: function () {
+				return this._radius
+			},
+			set: function (a) {
+				this._radius = a;
+				var b = 2 * this.radius,
+					c = 2 * this.radius;
+				this.width = b,
+					this.height = c
+			}
+		},
+		width: {
+			get: function () {
+				return this._width
+			},
+			set: function (a) {
+				this._radius = a / 2,
+					this._width = a
+			}
+		},
+		height: {
+			get: function () {
+				return this._height
+			},
+			set: function (a) {
+				this._radius = a / 2,
+					this._height = a
+			}
+		}
+	});
+
+	CircleNode.prototype.paint = function (a) {
+		a.save(),
+			a.beginPath(),
+			a.fillStyle = "rgba(" + this.fillColor + "," + this.alpha + ")",
+			a.arc(0, 0, this.radius, this.beginDegree, this.endDegree, !0),
+			a.fill(),
+			a.closePath(),
+			a.restore(),
+			this.paintText(a),
+			this.paintBorder(a),
+			this.paintCtrl(a),
+			this.paintAlarmText(a)
+	}
+
+	CircleNode.prototype.paintSelected = function (a) {
+		a.save(),
+			a.beginPath(),
+			a.strokeStyle = "rgba(168,202,255, 0.9)",
+			a.fillStyle = "rgba(168,202,236,0.7)",
+			a.arc(0, 0, this.radius + 3, this.beginDegree, this.endDegree, !0),
+			a.fill(),
+			a.stroke(),
+			a.closePath(),
+			a.restore()
+	}
+
 	function g(a, b, c) {
 		this.initialize(),
 			this.frameImages = a || [],
@@ -2162,61 +2248,6 @@
 			},
 			a
 	}
-	var j = {}
-
-	JTopo.extend(Node, JTopo.EditableElement)
-
-	// Node.prototype = new b
-
-	Object.defineProperties(Node.prototype, {
-		alarmColor: {
-			get: function () {
-				return this._alarmColor
-			},
-			set: function (b) {
-				if (this._alarmColor = b, null != this.image) {
-					var c = JTopo.util.genImageAlarm(this.image, b);
-					c && (this.alarmImage = c)
-				}
-			}
-		}
-	})
-	JTopo.extend(TextNode, Node)
-	JTopo.extend(LinkNode, TextNode)
-	JTopo.extend(CircleNode, Node)
-
-	Object.defineProperties(CircleNode.prototype, {
-		radius: {
-			get: function () {
-				return this._radius
-			},
-			set: function (a) {
-				this._radius = a;
-				var b = 2 * this.radius,
-					c = 2 * this.radius;
-				this.width = b,
-					this.height = c
-			}
-		},
-		width: {
-			get: function () {
-				return this._width
-			},
-			set: function (a) {
-				this._radius = a / 2,
-					this._width = a
-			}
-		},
-		height: {
-			get: function () {
-				return this._height
-			},
-			set: function (a) {
-				this._radius = a / 2,
-					this._height = a
-			}
-		}
-	});
 
 	JTopo.extend(g, Node)
 	JTopo.extend(h, Node)
@@ -2229,6 +2260,9 @@
 	JTopo.AnimateNode = AnimateNode
 }(JTopo));
 
+/**
+ * link elements
+ */
 (function (JTopo) {
 	function b(a, b) {
 		var c = [];
@@ -2257,561 +2291,587 @@
 	function e(a, b) {
 		return c(a, b).length
 	}
+	function h(b, c) {
+		var d = JTopo.util.lineF(b.cx, b.cy, c.cx, c.cy),
+			e = b.getBound(),
+			f = JTopo.util.intersectionLineBound(d, e);
+		return f
+	}
 	function Link(b, c, g) {
-		function h(b, c) {
-			var d = JTopo.util.lineF(b.cx, b.cy, c.cx, c.cy),
-				e = b.getBound(),
-				f = JTopo.util.intersectionLineBound(d, e);
-			return f
-		}
-		this.initialize = function (b, c, d) {
-			if (Link.prototype.initialize.apply(this, arguments), this.elementType = "link", this.zIndex = JTopo.zIndex_Link, 0 != arguments.length) {
-				this.text = d,
-					this.nodeA = b,
-					this.nodeZ = c,
-					this.nodeA && null == this.nodeA.outLinks && (this.nodeA.outLinks = []),
-					this.nodeA && null == this.nodeA.inLinks && (this.nodeA.inLinks = []),
-					this.nodeZ && null == this.nodeZ.inLinks && (this.nodeZ.inLinks = []),
-					this.nodeZ && null == this.nodeZ.outLinks && (this.nodeZ.outLinks = []),
-					null != this.nodeA && this.nodeA.outLinks.push(this),
-					null != this.nodeZ && this.nodeZ.inLinks.push(this),
-					this.caculateIndex(),
-					this.font = "12px Consolas",
-					this.fontColor = "255,255,255",
-					this.lineWidth = 2,
-					this.lineJoin = "miter",
-					this.transformAble = !1,
-					this.bundleOffset = 20,
-					this.bundleGap = 12,
-					this.textOffsetX = 0,
-					this.textOffsetY = 0,
-					this.arrowsRadius = null,
-					this.arrowsOffset = 0,
-					this.dashedPattern = null,
-					this.path = [];
-				var e = "text,font,fontColor,lineWidth,lineJoin".split(",");
-				this.serializedProperties = this.serializedProperties.concat(e)
-			}
-		},
-			this.caculateIndex = function () {
-				var a = e(this.nodeA, this.nodeZ);
-				a > 0 && (this.nodeIndex = a - 1)
-			},
-			this.initialize(b, c, g),
-			this.removeHandler = function () {
-				var a = this;
-				this.nodeA && this.nodeA.outLinks && (this.nodeA.outLinks = this.nodeA.outLinks.filter(function (b) {
-					return b !== a
-				})),
-					this.nodeZ && this.nodeZ.inLinks && (this.nodeZ.inLinks = this.nodeZ.inLinks.filter(function (b) {
-						return b !== a
-					}));
-				var b = d(this);
-				b.forEach(function (a, b) {
-					a.nodeIndex = b
-				})
-			},
-			this.getStartPosition = function () {
-				var a = {
-					x: this.nodeA.cx,
-					y: this.nodeA.cy
-				};
-				return a
-			},
-			this.getEndPosition = function () {
-				var a;
-				return null != this.arrowsRadius && (a = h(this.nodeZ, this.nodeA)),
-					null == a && (a = {
-						x: this.nodeZ.cx,
-						y: this.nodeZ.cy
-					}),
-					a
-			},
-			this.getPath = function () {
-				var a = [],
-					b = this.getStartPosition(),
-					c = this.getEndPosition();
-				if (this.nodeA === this.nodeZ)
-					return [b, c];
-				var d = e(this.nodeA, this.nodeZ);
-				if (1 == d)
-					return [b, c];
-				var f = Math.atan2(c.y - b.y, c.x - b.x),
-					g = {
-						x: b.x + this.bundleOffset * Math.cos(f),
-						y: b.y + this.bundleOffset * Math.sin(f)
-					},
-					h = {
-						x: c.x + this.bundleOffset * Math.cos(f - Math.PI),
-						y: c.y + this.bundleOffset * Math.sin(f - Math.PI)
-					},
-					i = f - Math.PI / 2,
-					j = f - Math.PI / 2,
-					k = d * this.bundleGap / 2 - this.bundleGap / 2,
-					l = this.bundleGap * this.nodeIndex,
-					m = {
-						x: g.x + l * Math.cos(i),
-						y: g.y + l * Math.sin(i)
-					},
-					n = {
-						x: h.x + l * Math.cos(j),
-						y: h.y + l * Math.sin(j)
-					};
-				return m = {
-					x: m.x + k * Math.cos(i - Math.PI),
-					y: m.y + k * Math.sin(i - Math.PI)
-				},
-					n = {
-						x: n.x + k * Math.cos(j - Math.PI),
-						y: n.y + k * Math.sin(j - Math.PI)
-					},
-					a.push({
-						x: b.x,
-						y: b.y
-					}),
-					a.push({
-						x: m.x,
-						y: m.y
-					}),
-					a.push({
-						x: n.x,
-						y: n.y
-					}),
-					a.push({
-						x: c.x,
-						y: c.y
-					}),
-					a
-			},
-			this.paintPath = function (a, b) {
-				if (this.nodeA === this.nodeZ)
-					return void this.paintLoop(a);
-				a.beginPath(),
-					a.moveTo(b[0].x, b[0].y);
-				for (var c = 1; c < b.length; c++)
-					null == this.dashedPattern ? a.lineTo(b[c].x, b[c].y) : a.JTopoDashedLineTo(b[c - 1].x, b[c - 1].y, b[c].x, b[c].y, this.dashedPattern);
-				if (a.stroke(), a.closePath(), null != this.arrowsRadius) {
-					var d = b[b.length - 2],
-						e = b[b.length - 1];
-					this.paintArrow(a, d, e)
-				}
-			},
-			this.paintLoop = function (a) {
-				a.beginPath(); {
-					var b = this.bundleGap * (this.nodeIndex + 1) / 2;
-					Math.PI + Math.PI / 2
-				}
-				a.arc(this.nodeA.x, this.nodeA.y, b, Math.PI / 2, 2 * Math.PI),
-					a.stroke(),
-					a.closePath()
-			},
-			this.paintArrow = function (b, c, d, flag) {
-				var e = this.arrowsOffset,
-					f = this.arrowsRadius / 2,
-					g = c,
-					h = d,
-					i = Math.atan2(h.y - g.y, h.x - g.x),
-					j = JTopo.util.getDistance(g, h) - this.arrowsRadius,
-					k = g.x + (j + e) * Math.cos(i),
-					l = g.y + (j + e) * Math.sin(i),
-					m = h.x + e * Math.cos(i),
-					n = h.y + e * Math.sin(i);
-				i -= Math.PI / 2;
-				var o = {
-					x: k + f * Math.cos(i),
-					y: l + f * Math.sin(i)
-				},
-					p = {
-						x: k + f * Math.cos(i - Math.PI),
-						y: l + f * Math.sin(i - Math.PI)
-					};
-				b.beginPath(),
-					b.fillStyle = "rgba(" + this.strokeColor + "," + this.alpha + ")",
-					b.moveTo(o.x, o.y),
-					b.lineTo(m, n),
-					b.lineTo(p.x, p.y),
-					b.stroke(),
-					b.closePath();
-
-				if (flag) {
-					return
-				}
-
-				this.paintArrow(b, d, c, true)
-			},
-			this.paint = function (a) {
-				if (null != this.nodeA && null != !this.nodeZ) {
-					var b = this.getPath(this.nodeIndex);
-					this.path = b,
-						a.strokeStyle = "rgba(" + this.strokeColor + "," + this.alpha + ")",
-						a.lineWidth = this.lineWidth,
-						this.paintPath(a, b),
-						b && b.length > 0 && this.paintText(a, b)
-				}
-			};
+		this.initialize(b, c, g)
 		var i = - (Math.PI / 2 + Math.PI / 4);
-		this.paintText = function (a, b) {
-			var c = b[0],
-				d = b[b.length - 1];
-			if (4 == b.length && (c = b[1], d = b[2]), this.text && this.text.length > 0) {
-				var e = (d.x + c.x) / 2 + this.textOffsetX,
-					f = (d.y + c.y) / 2 + this.textOffsetY;
-				a.save(),
-					a.beginPath(),
-					a.font = this.font;
-				var g = a.measureText(this.text).width,
-					h = a.measureText("田").width;
-				if (a.fillStyle = "rgba(" + this.fontColor + ", " + this.alpha + ")", this.nodeA === this.nodeZ) {
-					var j = this.bundleGap * (this.nodeIndex + 1) / 2,
-						e = this.nodeA.x + j * Math.cos(i),
-						f = this.nodeA.y + j * Math.sin(i);
-					a.fillText(this.text, e, f)
-				} else
-					a.fillText(this.text, e - g / 2, f - h / 2);
-				a.stroke(),
-					a.closePath(),
-					a.restore()
-			}
-		},
-			this.paintSelected = function (a) {
-				a.shadowBlur = 10,
-					a.shadowColor = "rgba(0,0,0,1)",
-					a.shadowOffsetX = 0,
-					a.shadowOffsetY = 0
-			},
-			this.isInBound = function (b, c) {
-				if (this.nodeA === this.nodeZ) {
-					var d = this.bundleGap * (this.nodeIndex + 1) / 2,
-						e = a.util.getDistance(this.nodeA, {
-							x: b,
-							y: c
-						}) - d;
-					return Math.abs(e) <= 3
-				}
-				for (var f = !1, g = 1; g < this.path.length; g++) {
-					var h = this.path[g - 1],
-						i = this.path[g];
-					if (1 == JTopo.util.isPointInLine({
-						x: b,
-						y: c
-					}, h, i)) {
-						f = !0;
-						break
-					}
-				}
-				return f
-			}
 	}
-	function FoldLink(a, b, c) {
-		this.initialize = function () {
-			FoldLink.prototype.initialize.apply(this, arguments),
-				this.direction = "horizontal"
-		},
-			this.initialize(a, b, c),
-			this.getStartPosition = function () {
-				var a = {
-					x: this.nodeA.cx,
-					y: this.nodeA.cy
-				};
-				return "horizontal" == this.direction ? this.nodeZ.cx > a.x ? a.x += this.nodeA.width / 2 : a.x -= this.nodeA.width / 2 : this.nodeZ.cy > a.y ? a.y += this.nodeA.height / 2 : a.y -= this.nodeA.height / 2,
-					a
-			},
-			this.getEndPosition = function () {
-				var a = {
-					x: this.nodeZ.cx,
-					y: this.nodeZ.cy
-				};
-				return "horizontal" == this.direction ? this.nodeA.cy < a.y ? a.y -= this.nodeZ.height / 2 : a.y += this.nodeZ.height / 2 : a.x = this.nodeA.cx < a.x ? this.nodeZ.x : this.nodeZ.x + this.nodeZ.width,
-					a
-			},
-			this.getPath = function (a) {
-				var b = [],
-					c = this.getStartPosition(),
-					d = this.getEndPosition();
-				if (this.nodeA === this.nodeZ)
-					return [c, d];
-				var f,
-					g,
-					h = e(this.nodeA, this.nodeZ),
-					i = (h - 1) * this.bundleGap,
-					j = this.bundleGap * a - i / 2;
-				return "horizontal" == this.direction ? (f = d.x + j, g = c.y - j, b.push({
-					x: c.x,
-					y: g
-				}), b.push({
-					x: f,
-					y: g
-				}), b.push({
-					x: f,
-					y: d.y
-				})) : (f = c.x + j, g = d.y - j, b.push({
-					x: f,
-					y: c.y
-				}), b.push({
-					x: f,
-					y: g
-				}), b.push({
-					x: d.x,
-					y: g
-				})),
-					b
-			},
-			this.paintText = function (a, b) {
-				if (this.text && this.text.length > 0) {
-					var c = b[1],
-						d = c.x + this.textOffsetX,
-						e = c.y + this.textOffsetY;
-					a.save(),
-						a.beginPath(),
-						a.font = this.font;
-					var f = a.measureText(this.text).width,
-						g = a.measureText("田").width;
-					a.fillStyle = "rgba(" + this.fontColor + ", " + this.alpha + ")",
-						a.fillText(this.text, d - f / 2, e - g / 2),
-						a.stroke(),
-						a.closePath(),
-						a.restore()
-				}
-			}
+	JTopo.extend(Link, JTopo.InteractiveElement)
+
+	Link.prototype.initialize = function (nodeA, nodeZ, text) {
+		if (arguments.length < 2) {
+			throw new Error('')
+		}
+		Link.super.initialize.apply(this, arguments)
+		this.elementType = "link"
+		this.zIndex = JTopo.zIndex_Link
+
+		this.text = text
+		this.nodeA = nodeA
+		this.nodeZ = nodeZ
+		this.nodeA && null == this.nodeA.outLinks && (this.nodeA.outLinks = [])
+		this.nodeA && null == this.nodeA.inLinks && (this.nodeA.inLinks = [])
+		this.nodeZ && null == this.nodeZ.inLinks && (this.nodeZ.inLinks = [])
+		this.nodeZ && null == this.nodeZ.outLinks && (this.nodeZ.outLinks = [])
+		null != this.nodeA && this.nodeA.outLinks.push(this)
+		null != this.nodeZ && this.nodeZ.inLinks.push(this)
+		this.caculateIndex()
+		this.font = "12px Consolas"
+		this.fontColor = "255,255,255"
+		this.lineWidth = 2
+		this.lineJoin = "miter"
+		this.transformAble = !1
+		this.bundleOffset = 20
+		this.bundleGap = 12
+		this.textOffsetX = 0
+		this.textOffsetY = 0
+		this.arrowsRadius = null
+		this.arrowsOffset = 0
+		this.dashedPattern = null
+		this.path = []
+		var e = "text,font,fontColor,lineWidth,lineJoin".split(",")
+		this.serializedProperties = this.serializedProperties.concat(e)
 	}
-	function FlexionalLink(a, b, c) {
-		this.initialize = function () {
-			FlexionalLink.prototype.initialize.apply(this, arguments),
-				this.direction = "vertical",
-				this.offsetGap = 44
-		},
-			this.initialize(a, b, c),
-			this.getStartPosition = function () {
-				var a = {
-					x: this.nodeA.cx,
-					y: this.nodeA.cy
-				};
-				return "horizontal" == this.direction ? a.x = this.nodeZ.cx < a.x ? this.nodeA.x : this.nodeA.x + this.nodeA.width : a.y = this.nodeZ.cy < a.y ? this.nodeA.y : this.nodeA.y + this.nodeA.height,
-					a
-			},
-			this.getEndPosition = function () {
-				var a = {
-					x: this.nodeZ.cx,
-					y: this.nodeZ.cy
-				};
-				return "horizontal" == this.direction ? a.x = this.nodeA.cx < a.x ? this.nodeZ.x : this.nodeZ.x + this.nodeZ.width : a.y = this.nodeA.cy < a.y ? this.nodeZ.y : this.nodeZ.y + this.nodeZ.height,
-					a
-			},
-			this.getPath = function (a) {
-				var b = this.getStartPosition(),
-					c = this.getEndPosition();
-				if (this.nodeA === this.nodeZ)
-					return [b, c];
-				var d = [],
-					f = e(this.nodeA, this.nodeZ),
-					g = (f - 1) * this.bundleGap,
-					h = this.bundleGap * a - g / 2,
-					i = this.offsetGap;
-				return "horizontal" == this.direction ? (this.nodeA.cx > this.nodeZ.cx && (i = -i), d.push({
-					x: b.x,
-					y: b.y + h
-				}), d.push({
-					x: b.x + i,
-					y: b.y + h
-				}), d.push({
-					x: c.x - i,
-					y: c.y + h
-				}), d.push({
-					x: c.x,
-					y: c.y + h
-				})) : (this.nodeA.cy > this.nodeZ.cy && (i = -i), d.push({
-					x: b.x + h,
-					y: b.y
-				}), d.push({
-					x: b.x + h,
-					y: b.y + i
-				}), d.push({
-					x: c.x + h,
-					y: c.y - i
-				}), d.push({
-					x: c.x + h,
-					y: c.y
-				})),
-					d
-			}
+	Link.prototype.caculateIndex = function () {
+		var a = e(this.nodeA, this.nodeZ);
+		a > 0 && (this.nodeIndex = a - 1)
 	}
-	function CurveLink(a, b, c) {
-		this.initialize = function () {
-			CurveLink.prototype.initialize.apply(this, arguments)
+	Link.prototype.removeHandler = function () {
+		var a = this;
+		this.nodeA && this.nodeA.outLinks && (this.nodeA.outLinks = this.nodeA.outLinks.filter(function (b) {
+			return b !== a
+		})),
+			this.nodeZ && this.nodeZ.inLinks && (this.nodeZ.inLinks = this.nodeZ.inLinks.filter(function (b) {
+				return b !== a
+			}));
+		var b = d(this);
+		b.forEach(function (a, b) {
+			a.nodeIndex = b
+		})
+	}
+	Link.prototype.getStartPosition = function () {
+		var a = {
+			x: this.nodeA.cx,
+			y: this.nodeA.cy
+		};
+		return a
+	}
+	Link.prototype.getEndPosition = function () {
+		var a;
+		return null != this.arrowsRadius && (a = h(this.nodeZ, this.nodeA)),
+			null == a && (a = {
+				x: this.nodeZ.cx,
+				y: this.nodeZ.cy
+			}),
+			a
+	}
+	Link.prototype.getPath = function () {
+		var a = [],
+			b = this.getStartPosition(),
+			c = this.getEndPosition();
+		if (this.nodeA === this.nodeZ)
+			return [b, c];
+		var d = e(this.nodeA, this.nodeZ);
+		if (1 == d)
+			return [b, c];
+		var f = Math.atan2(c.y - b.y, c.x - b.x),
+			g = {
+				x: b.x + this.bundleOffset * Math.cos(f),
+				y: b.y + this.bundleOffset * Math.sin(f)
+			},
+			h = {
+				x: c.x + this.bundleOffset * Math.cos(f - Math.PI),
+				y: c.y + this.bundleOffset * Math.sin(f - Math.PI)
+			},
+			i = f - Math.PI / 2,
+			j = f - Math.PI / 2,
+			k = d * this.bundleGap / 2 - this.bundleGap / 2,
+			l = this.bundleGap * this.nodeIndex,
+			m = {
+				x: g.x + l * Math.cos(i),
+				y: g.y + l * Math.sin(i)
+			},
+			n = {
+				x: h.x + l * Math.cos(j),
+				y: h.y + l * Math.sin(j)
+			};
+		return m = {
+			x: m.x + k * Math.cos(i - Math.PI),
+			y: m.y + k * Math.sin(i - Math.PI)
 		},
-			this.initialize(a, b, c),
-			this.paintPath = function (a, b) {
-				if (this.nodeA === this.nodeZ)
-					return void this.paintLoop(a);
+			n = {
+				x: n.x + k * Math.cos(j - Math.PI),
+				y: n.y + k * Math.sin(j - Math.PI)
+			},
+			a.push({
+				x: b.x,
+				y: b.y
+			}),
+			a.push({
+				x: m.x,
+				y: m.y
+			}),
+			a.push({
+				x: n.x,
+				y: n.y
+			}),
+			a.push({
+				x: c.x,
+				y: c.y
+			}),
+			a
+	}
+	Link.prototype.paintPath = function (a, b) {
+		if (this.nodeA === this.nodeZ)
+			return void this.paintLoop(a);
+		a.beginPath(),
+			a.moveTo(b[0].x, b[0].y);
+		for (var c = 1; c < b.length; c++)
+			null == this.dashedPattern ? a.lineTo(b[c].x, b[c].y) : a.JTopoDashedLineTo(b[c - 1].x, b[c - 1].y, b[c].x, b[c].y, this.dashedPattern);
+		if (a.stroke(), a.closePath(), null != this.arrowsRadius) {
+			var d = b[b.length - 2],
+				e = b[b.length - 1];
+			this.paintArrow(a, d, e)
+		}
+	}
+	Link.prototype.paintLoop = function (a) {
+		a.beginPath(); {
+			var b = this.bundleGap * (this.nodeIndex + 1) / 2;
+			Math.PI + Math.PI / 2
+		}
+		a.arc(this.nodeA.x, this.nodeA.y, b, Math.PI / 2, 2 * Math.PI),
+			a.stroke(),
+			a.closePath()
+	}
+	Link.prototype.paintArrow = function (b, c, d, flag) {
+		var e = this.arrowsOffset,
+			f = this.arrowsRadius / 2,
+			g = c,
+			h = d,
+			i = Math.atan2(h.y - g.y, h.x - g.x),
+			j = JTopo.util.getDistance(g, h) - this.arrowsRadius,
+			k = g.x + (j + e) * Math.cos(i),
+			l = g.y + (j + e) * Math.sin(i),
+			m = h.x + e * Math.cos(i),
+			n = h.y + e * Math.sin(i);
+		i -= Math.PI / 2;
+		var o = {
+			x: k + f * Math.cos(i),
+			y: l + f * Math.sin(i)
+		},
+			p = {
+				x: k + f * Math.cos(i - Math.PI),
+				y: l + f * Math.sin(i - Math.PI)
+			};
+		b.beginPath(),
+			b.fillStyle = "rgba(" + this.strokeColor + "," + this.alpha + ")",
+			b.moveTo(o.x, o.y),
+			b.lineTo(m, n),
+			b.lineTo(p.x, p.y),
+			b.stroke(),
+			b.closePath();
+
+		if (flag) {
+			return
+		}
+
+		this.paintArrow(b, d, c, true)
+	}
+	Link.prototype.paint = function (a) {
+		if (null != this.nodeA && null != !this.nodeZ) {
+			var b = this.getPath(this.nodeIndex);
+			this.path = b,
+				a.strokeStyle = "rgba(" + this.strokeColor + "," + this.alpha + ")",
+				a.lineWidth = this.lineWidth,
+				this.paintPath(a, b),
+				b && b.length > 0 && this.paintText(a, b)
+		}
+	}
+	Link.prototype.paintText = function (a, b) {
+		var c = b[0],
+			d = b[b.length - 1];
+		if (4 == b.length && (c = b[1], d = b[2]), this.text && this.text.length > 0) {
+			var e = (d.x + c.x) / 2 + this.textOffsetX,
+				f = (d.y + c.y) / 2 + this.textOffsetY;
+			a.save(),
 				a.beginPath(),
-					a.moveTo(b[0].x, b[0].y);
-				for (var c = 1; c < b.length; c++) {
-					var d = b[c - 1],
-						e = b[c],
-						f = (d.x + e.x) / 2,
-						g = (d.y + e.y) / 2;
-					g += (e.y - d.y) / 2,
-						a.strokeStyle = "rgba(" + this.strokeColor + "," + this.alpha + ")",
-						a.lineWidth = this.lineWidth,
-						a.moveTo(d.x, d.cy),
-						a.quadraticCurveTo(f, g, e.x, e.y),
-						a.stroke()
-				}
-				if (a.stroke(), a.closePath(), null != this.arrowsRadius) {
-					var h = b[b.length - 2],
-						i = b[b.length - 1];
-					this.paintArrow(a, h, i)
-				}
+				a.font = this.font;
+			var g = a.measureText(this.text).width,
+				h = a.measureText("田").width;
+			if (a.fillStyle = "rgba(" + this.fontColor + ", " + this.alpha + ")", this.nodeA === this.nodeZ) {
+				var j = this.bundleGap * (this.nodeIndex + 1) / 2,
+					e = this.nodeA.x + j * Math.cos(i),
+					f = this.nodeA.y + j * Math.sin(i);
+				a.fillText(this.text, e, f)
+			} else
+				a.fillText(this.text, e - g / 2, f - h / 2);
+			a.stroke(),
+				a.closePath(),
+				a.restore()
+		}
+	}
+	Link.prototype.paintSelected = function (a) {
+		a.shadowBlur = 10,
+			a.shadowColor = "rgba(0,0,0,1)",
+			a.shadowOffsetX = 0,
+			a.shadowOffsetY = 0
+	}
+	Link.prototype.isInBound = function (b, c) {
+		if (this.nodeA === this.nodeZ) {
+			var d = this.bundleGap * (this.nodeIndex + 1) / 2,
+				e = a.util.getDistance(this.nodeA, {
+					x: b,
+					y: c
+				}) - d;
+			return Math.abs(e) <= 3
+		}
+		for (var f = !1, g = 1; g < this.path.length; g++) {
+			var h = this.path[g - 1],
+				i = this.path[g];
+			if (1 == JTopo.util.isPointInLine({
+				x: b,
+				y: c
+			}, h, i)) {
+				f = !0;
+				break
 			}
+		}
+		return f
 	}
 
-	JTopo.extend(Link, JTopo.InteractiveElement)
+	function FoldLink(a, b, c) {
+		this.initialize(a, b, c)
+	}
+
 	JTopo.extend(FoldLink, Link)
+
+	FoldLink.prototype.initialize = function () {
+		FoldLink.prototype.initialize.apply(this, arguments),
+			this.direction = "horizontal"
+	}
+	FoldLink.prototype.getStartPosition = function () {
+		var a = {
+			x: this.nodeA.cx,
+			y: this.nodeA.cy
+		};
+		return "horizontal" == this.direction ? this.nodeZ.cx > a.x ? a.x += this.nodeA.width / 2 : a.x -= this.nodeA.width / 2 : this.nodeZ.cy > a.y ? a.y += this.nodeA.height / 2 : a.y -= this.nodeA.height / 2,
+			a
+	}
+	FoldLink.prototype.getEndPosition = function () {
+		var a = {
+			x: this.nodeZ.cx,
+			y: this.nodeZ.cy
+		};
+		return "horizontal" == this.direction ? this.nodeA.cy < a.y ? a.y -= this.nodeZ.height / 2 : a.y += this.nodeZ.height / 2 : a.x = this.nodeA.cx < a.x ? this.nodeZ.x : this.nodeZ.x + this.nodeZ.width,
+			a
+	}
+	FoldLink.prototype.getPath = function (a) {
+		var b = [],
+			c = this.getStartPosition(),
+			d = this.getEndPosition();
+		if (this.nodeA === this.nodeZ)
+			return [c, d];
+		var f,
+			g,
+			h = e(this.nodeA, this.nodeZ),
+			i = (h - 1) * this.bundleGap,
+			j = this.bundleGap * a - i / 2;
+		return "horizontal" == this.direction ? (f = d.x + j, g = c.y - j, b.push({
+			x: c.x,
+			y: g
+		}), b.push({
+			x: f,
+			y: g
+		}), b.push({
+			x: f,
+			y: d.y
+		})) : (f = c.x + j, g = d.y - j, b.push({
+			x: f,
+			y: c.y
+		}), b.push({
+			x: f,
+			y: g
+		}), b.push({
+			x: d.x,
+			y: g
+		})),
+			b
+	}
+	FoldLink.prototype.paintText = function (a, b) {
+		if (this.text && this.text.length > 0) {
+			var c = b[1],
+				d = c.x + this.textOffsetX,
+				e = c.y + this.textOffsetY;
+			a.save(),
+				a.beginPath(),
+				a.font = this.font;
+			var f = a.measureText(this.text).width,
+				g = a.measureText("田").width;
+			a.fillStyle = "rgba(" + this.fontColor + ", " + this.alpha + ")",
+				a.fillText(this.text, d - f / 2, e - g / 2),
+				a.stroke(),
+				a.closePath(),
+				a.restore()
+		}
+	}
+
+	function FlexionalLink(a, b, c) {
+		this.initialize(a, b, c)
+	}
+
 	JTopo.extend(FlexionalLink, Link)
+
+	FlexionalLink.prototype.initialize = function () {
+		FlexionalLink.prototype.initialize.apply(this, arguments),
+			this.direction = "vertical",
+			this.offsetGap = 44
+	}
+	FlexionalLink.prototype.getStartPosition = function () {
+		var a = {
+			x: this.nodeA.cx,
+			y: this.nodeA.cy
+		};
+		return "horizontal" == this.direction ? a.x = this.nodeZ.cx < a.x ? this.nodeA.x : this.nodeA.x + this.nodeA.width : a.y = this.nodeZ.cy < a.y ? this.nodeA.y : this.nodeA.y + this.nodeA.height,
+			a
+	}
+	FlexionalLink.prototype.getEndPosition = function () {
+		var a = {
+			x: this.nodeZ.cx,
+			y: this.nodeZ.cy
+		};
+		return "horizontal" == this.direction ? a.x = this.nodeA.cx < a.x ? this.nodeZ.x : this.nodeZ.x + this.nodeZ.width : a.y = this.nodeA.cy < a.y ? this.nodeZ.y : this.nodeZ.y + this.nodeZ.height,
+			a
+	}
+	FlexionalLink.prototype.getPath = function (a) {
+		var b = this.getStartPosition(),
+			c = this.getEndPosition();
+		if (this.nodeA === this.nodeZ)
+			return [b, c];
+		var d = [],
+			f = e(this.nodeA, this.nodeZ),
+			g = (f - 1) * this.bundleGap,
+			h = this.bundleGap * a - g / 2,
+			i = this.offsetGap;
+		return "horizontal" == this.direction ? (this.nodeA.cx > this.nodeZ.cx && (i = -i), d.push({
+			x: b.x,
+			y: b.y + h
+		}), d.push({
+			x: b.x + i,
+			y: b.y + h
+		}), d.push({
+			x: c.x - i,
+			y: c.y + h
+		}), d.push({
+			x: c.x,
+			y: c.y + h
+		})) : (this.nodeA.cy > this.nodeZ.cy && (i = -i), d.push({
+			x: b.x + h,
+			y: b.y
+		}), d.push({
+			x: b.x + h,
+			y: b.y + i
+		}), d.push({
+			x: c.x + h,
+			y: c.y - i
+		}), d.push({
+			x: c.x + h,
+			y: c.y
+		})),
+			d
+	}
+
+
+	function CurveLink(a, b, c) {
+		this.initialize(a, b, c)
+	}
+
 	JTopo.extend(CurveLink, Link)
+
+
+	CurveLink.prototype.initialize = function () {
+		CurveLink.prototype.initialize.apply(this, arguments)
+	}
+	CurveLink.prototype.paintPath = function (a, b) {
+		if (this.nodeA === this.nodeZ)
+			return void this.paintLoop(a);
+		a.beginPath(),
+			a.moveTo(b[0].x, b[0].y);
+		for (var c = 1; c < b.length; c++) {
+			var d = b[c - 1],
+				e = b[c],
+				f = (d.x + e.x) / 2,
+				g = (d.y + e.y) / 2;
+			g += (e.y - d.y) / 2,
+				a.strokeStyle = "rgba(" + this.strokeColor + "," + this.alpha + ")",
+				a.lineWidth = this.lineWidth,
+				a.moveTo(d.x, d.cy),
+				a.quadraticCurveTo(f, g, e.x, e.y),
+				a.stroke()
+		}
+		if (a.stroke(), a.closePath(), null != this.arrowsRadius) {
+			var h = b[b.length - 2],
+				i = b[b.length - 1];
+			this.paintArrow(a, h, i)
+		}
+	}
+
 	JTopo.Link = Link
 	JTopo.FoldLink = FoldLink
 	JTopo.FlexionalLink = FlexionalLink
 	JTopo.CurveLink = CurveLink
 }(JTopo));
 
+/**
+ * container element
+ */
 (function (JTopo) {
 	function Container(c) {
-		this.initialize = function (c) {
+		this.initialize(c)
+	}
 
-			Container.prototype.initialize.apply(this, null),
-				this.elementType = "container",
-				this.zIndex = JTopo.zIndex_Container,
-				this.width = 100,
-				this.height = 100,
-				this.childs = [],
-				this.alpha = .5,
-				this.dragable = !0,
-				this.childDragble = !0,
-				this.visible = !0,
-				this.fillColor = "10,100,80",
-				this.borderWidth = 0,
-				this.borderColor = "255,255,255",
-				this.borderRadius = null,
-				this.font = "12px Consolas",
-				this.fontColor = "255,255,255",
-				this.text = c,
-				this.textPosition = "Bottom_Center",
-				this.textOffsetX = 0,
-				this.textOffsetY = 0,
-				this.layout = new JTopo.layout.AutoBoundLayout
-		},
-			this.initialize(c),
-			this.add = function (a) {
-				this.childs.push(a),
-					a.dragable = this.childDragble
-			},
-			this.remove = function (a) {
-				for (var b = 0; b < this.childs.length; b++)
-					if (this.childs[b] === a) {
-						a.parentContainer = null,
-							this.childs = this.childs.del(b),
-							a.lastParentContainer = this;
-						break
-					}
-			},
-			this.removeAll = function () {
-				this.childs = []
-			},
-			this.setLocation = function (a, b) {
-				var c = a - this.x,
-					d = b - this.y;
-				this.x = a,
-					this.y = b;
-				for (var e = 0; e < this.childs.length; e++) {
-					var f = this.childs[e];
-					f.setLocation(f.x + c, f.y + d)
-				}
-			},
-			this.doLayout = function (a) {
-				a && a(this, this.childs)
-			},
-			this.paint = function (a) {
-				this.visible && (this.layout && this.layout(this, this.childs), a.beginPath(), a.fillStyle = "rgba(" + this.fillColor + "," + this.alpha + ")", null == this.borderRadius || 0 == this.borderRadius ? a.rect(this.x, this.y, this.width, this.height) : a.JTopoRoundRect(this.x, this.y, this.width, this.height, this.borderRadius), a.fill(), a.closePath(), this.paintText(a), this.paintBorder(a))
-			},
-			this.paintBorder = function (a) {
-				if (0 != this.borderWidth) {
-					a.beginPath(),
-						a.lineWidth = this.borderWidth,
-						a.strokeStyle = "rgba(" + this.borderColor + "," + this.alpha + ")";
-					var b = this.borderWidth / 2;
-					null == this.borderRadius || 0 == this.borderRadius ? a.rect(this.x - b, this.y - b, this.width + this.borderWidth, this.height + this.borderWidth) : a.JTopoRoundRect(this.x - b, this.y - b, this.width + this.borderWidth, this.height + this.borderWidth, this.borderRadius),
-						a.stroke(),
-						a.closePath()
-				}
-			},
-			this.paintText = function (a) {
-				var b = this.text;
-				if (null != b && "" != b) {
-					a.beginPath(),
-						a.font = this.font;
-					var c = a.measureText(b).width,
-						d = a.measureText("田").width;
-					a.fillStyle = "rgba(" + this.fontColor + ", " + this.alpha + ")";
-					var e = this.getTextPostion(this.textPosition, c, d);
-					a.fillText(b, e.x, e.y),
-						a.closePath()
-				}
-			},
-			this.getTextPostion = function (a, b, c) {
-				var d = null;
-				return null == a || "Bottom_Center" == a ? d = {
-					x: this.x + this.width / 2 - b / 2,
-					y: this.y + this.height + c
-				}
-					: "Top_Center" == a ? d = {
-						x: this.x + this.width / 2 - b / 2,
-						y: this.y - c / 2
-					}
-						: "Top_Right" == a ? d = {
-							x: this.x + this.width - b,
-							y: this.y - c / 2
-						}
-							: "Top_Left" == a ? d = {
-								x: this.x,
-								y: this.y - c / 2
-							}
-								: "Bottom_Right" == a ? d = {
-									x: this.x + this.width - b,
-									y: this.y + this.height + c
-								}
-									: "Bottom_Left" == a ? d = {
-										x: this.x,
-										y: this.y + this.height + c
-									}
-										: "Middle_Center" == a ? d = {
-											x: this.x + this.width / 2 - b / 2,
-											y: this.y + this.height / 2 + c / 2
-										}
-											: "Middle_Right" == a ? d = {
-												x: this.x + this.width - b,
-												y: this.y + this.height / 2 + c / 2
-											}
-												: "Middle_Left" == a && (d = {
-													x: this.x,
-													y: this.y + this.height / 2 + c / 2
-												}),
-					null != this.textOffsetX && (d.x += this.textOffsetX),
-					null != this.textOffsetY && (d.y += this.textOffsetY),
-					d
-			},
-			this.paintMouseover = function () { },
-			this.paintSelected = function (a) {
-				a.shadowBlur = 10,
-					a.shadowColor = "rgba(0,0,0,1)",
-					a.shadowOffsetX = 0,
-					a.shadowOffsetY = 0
+	JTopo.extend(Container, JTopo.InteractiveElement)
+
+	Container.prototype.initialize = function (text) {
+		Container.super.initialize.apply(this, null)
+
+		this.elementType = "container"
+		this.zIndex = JTopo.zIndex_Container
+		this.width = 100
+		this.height = 100
+		this.childs = []
+		this.alpha = .5
+		this.dragable = !0
+		this.childDragble = !0
+		this.visible = !0
+		this.fillColor = "10,100,80"
+		this.borderWidth = 0
+		this.borderColor = "255,255,255"
+		this.borderRadius = null
+		this.font = "12px Consolas"
+		this.fontColor = "255,255,255"
+		this.text = text
+		this.textPosition = "Bottom_Center"
+		this.textOffsetX = 0
+		this.textOffsetY = 0
+		this.layout = new JTopo.layout.AutoBoundLayout
+	}
+	Container.prototype.add = function (a) {
+		this.childs.push(a),
+			a.dragable = this.childDragble
+	}
+	Container.prototype.remove = function (a) {
+		for (var b = 0; b < this.childs.length; b++)
+			if (this.childs[b] === a) {
+				a.parentContainer = null,
+					this.childs = this.childs.del(b),
+					a.lastParentContainer = this;
+				break
 			}
 	}
-	JTopo.extend(Container, JTopo.InteractiveElement)
+	Container.prototype.removeAll = function () {
+		this.childs = []
+	}
+	Container.prototype.setLocation = function (a, b) {
+		var c = a - this.x,
+			d = b - this.y;
+		this.x = a,
+			this.y = b;
+		for (var e = 0; e < this.childs.length; e++) {
+			var f = this.childs[e];
+			f.setLocation(f.x + c, f.y + d)
+		}
+	}
+	Container.prototype.doLayout = function (a) {
+		a && a(this, this.childs)
+	}
+	Container.prototype.paint = function (a) {
+		this.visible && (this.layout && this.layout(this, this.childs), a.beginPath(), a.fillStyle = "rgba(" + this.fillColor + "," + this.alpha + ")", null == this.borderRadius || 0 == this.borderRadius ? a.rect(this.x, this.y, this.width, this.height) : a.JTopoRoundRect(this.x, this.y, this.width, this.height, this.borderRadius), a.fill(), a.closePath(), this.paintText(a), this.paintBorder(a))
+	}
+	Container.prototype.paintBorder = function (a) {
+		if (0 != this.borderWidth) {
+			a.beginPath(),
+				a.lineWidth = this.borderWidth,
+				a.strokeStyle = "rgba(" + this.borderColor + "," + this.alpha + ")";
+			var b = this.borderWidth / 2;
+			null == this.borderRadius || 0 == this.borderRadius ? a.rect(this.x - b, this.y - b, this.width + this.borderWidth, this.height + this.borderWidth) : a.JTopoRoundRect(this.x - b, this.y - b, this.width + this.borderWidth, this.height + this.borderWidth, this.borderRadius),
+				a.stroke(),
+				a.closePath()
+		}
+	}
+	Container.prototype.paintText = function (a) {
+		var b = this.text;
+		if (null != b && "" != b) {
+			a.beginPath(),
+				a.font = this.font;
+			var c = a.measureText(b).width,
+				d = a.measureText("田").width;
+			a.fillStyle = "rgba(" + this.fontColor + ", " + this.alpha + ")";
+			var e = this.getTextPostion(this.textPosition, c, d);
+			a.fillText(b, e.x, e.y),
+				a.closePath()
+		}
+	}
+	Container.prototype.getTextPostion = function (a, b, c) {
+		var d = null;
+		return null == a || "Bottom_Center" == a ? d = {
+			x: this.x + this.width / 2 - b / 2,
+			y: this.y + this.height + c
+		}
+			: "Top_Center" == a ? d = {
+				x: this.x + this.width / 2 - b / 2,
+				y: this.y - c / 2
+			}
+				: "Top_Right" == a ? d = {
+					x: this.x + this.width - b,
+					y: this.y - c / 2
+				}
+					: "Top_Left" == a ? d = {
+						x: this.x,
+						y: this.y - c / 2
+					}
+						: "Bottom_Right" == a ? d = {
+							x: this.x + this.width - b,
+							y: this.y + this.height + c
+						}
+							: "Bottom_Left" == a ? d = {
+								x: this.x,
+								y: this.y + this.height + c
+							}
+								: "Middle_Center" == a ? d = {
+									x: this.x + this.width / 2 - b / 2,
+									y: this.y + this.height / 2 + c / 2
+								}
+									: "Middle_Right" == a ? d = {
+										x: this.x + this.width - b,
+										y: this.y + this.height / 2 + c / 2
+									}
+										: "Middle_Left" == a && (d = {
+											x: this.x,
+											y: this.y + this.height / 2 + c / 2
+										}),
+			null != this.textOffsetX && (d.x += this.textOffsetX),
+			null != this.textOffsetY && (d.y += this.textOffsetY),
+			d
+	}
+	Container.prototype.paintMouseover = function () { }
+	Container.prototype.paintSelected = function (a) {
+		a.shadowBlur = 10,
+			a.shadowColor = "rgba(0,0,0,1)",
+			a.shadowOffsetX = 0,
+			a.shadowOffsetY = 0
+	}
+
 	JTopo.Container = Container
 }(JTopo));
 
+/**
+ * Layouts
+ */
 (function (a) {
 	function getNodesCenter(a) {
 		var b = 0,
@@ -3230,7 +3290,9 @@
 	}
 }(JTopo));
 
-
+/**
+ * chart
+ */
 (function (JTopo) {
 	function PieChartNode() {
 		var b = new JTopo.CircleNode;
@@ -3321,7 +3383,9 @@
 	JTopo.PieChartNode = PieChartNode
 }(JTopo));
 
-
+/**
+ * Effect and Animate
+ */
 (function (JTopo) {
 	function b(b, c) {
 		var d,
@@ -3699,6 +3763,9 @@
 	JTopo.Animate.stopAll = stopAll
 }(JTopo));
 
+/**
+ * find method
+ */
 (function (JTopo) {
 	function b(a, b) {
 		var c = [];
