@@ -1,68 +1,52 @@
 {
-    "name": "jtopo",
-    "version": "0.0.1",
-    "description": "Reactive, component-oriented view layer for modern web interfaces.",
-    "main": "dist/vue.runtime.common.js",
-    "module": "dist/vue.runtime.esm.js",
-    "unpkg": "dist/vue.js",
-    "jsdelivr": "dist/vue.js",
-    "typings": "types/index.d.ts",
-    "files": [
-        "src",
-        "dist/*.js",
-        "types/*.d.ts"
-    ],
-    "sideEffects": false,
-    "scripts": {
-        "start": "node server.js",
-        "dev": "webpack-dev-server -w --mode development",
-        "build": "webpack --mode production --display-error-details",
-        "lint": "eslint --fix src"
-    },
-    "gitHooks": {
-        "pre-commit": "lint-staged",
-        "commit-msg": "node scripts/verify-commit-msg.js"
-    },
-    "lint-staged": {
-        "*.js": [
-            "eslint --fix",
-            "git add"
-        ]
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/vuejs/vue.git"
-    },
-    "keywords": [
-        "jtopo"
-    ],
-    "author": "Evan You",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/vuejs/vue/issues"
-    },
-    "homepage": "https://github.com/vuejs/vue#readme",
-    "devDependencies": {
-        "@babel/core": "^7.1.2",
-        "@babel/plugin-transform-runtime": "^7.1.0",
-        "@babel/preset-env": "^7.1.0",
-        "babel-eslint": "^10.0.1",
-        "babel-loader": "^8.0.4",
-        "eslint": "^5.6.1",
-        "eslint-config-standard": "^12.0.0",
-        "eslint-friendly-formatter": "^4.0.1",
-        "eslint-loader": "^2.1.1",
-        "eslint-plugin-import": "^2.14.0",
-        "eslint-plugin-node": "^7.0.1",
-        "eslint-plugin-promise": "^4.0.1",
-        "eslint-plugin-standard": "^4.0.0",
-        "webpack": "^4.20.2",
-        "webpack-cli": "^3.1.2",
-        "webpack-dev-server": "^3.1.9"
-    },
-    "config": {
-        "commitizen": {
-            "path": "./node_modules/cz-conventional-changelog"
-        }
-    }
+  "name": "jp-demo",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/tp.min.js",
+  "module": "dist/tp.min.js",
+  "unpkg": "dist/tp.min.js",
+  "files": [
+    "src",
+    "dist/*.js"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "start": "node server.js",
+    "dev": "webpack-dev-server -w --mode development",
+    "build": "webpack --mode production --display-error-details",
+    "lint": "eslint --fix src"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com:chongjohn716/tp-demo.git"
+  },
+  "keywords": [
+    "tp"
+  ],
+  "author": "chongjohn716",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-transform-runtime": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "babel-eslint": "^10.0.1",
+    "babel-loader": "^8.0.4",
+    "eslint": "^5.6.1",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-friendly-formatter": "^4.0.1",
+    "eslint-loader": "^2.1.1",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.9"
+  }
 }

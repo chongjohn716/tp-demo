@@ -8,7 +8,7 @@ const config = {
   entry: path.join(__dirname, './src/index.js'),
   output: {
     path: path.join(__dirname, './dist'),
-    filename: 'jtopo-min.js',
+    filename: 'tp.min.js',
     library: 'JTopo',
     libraryExport: 'default',
     libraryTarget: 'umd'
@@ -24,7 +24,7 @@ const config = {
     port: 8089,
     before: function (app) {
       app.get('/demo/js/jtopo-min.js', function (req, res) {
-        res.redirect('/jtopo-min.js')
+        res.redirect('/tp.min.js')
       })
     }
   },
