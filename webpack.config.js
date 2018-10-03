@@ -1,21 +1,21 @@
-var path = require("path");
+var path = require('path')
 
-function resolve(dir) {
-  return path.join(__dirname, '..', dir)
-}
+// function resolve(dir) {
+//   return path.join(__dirname, '..', dir)
+// }
 
 const config = {
-  entry: path.join(__dirname, "./src/index.js"),
+  entry: path.join(__dirname, './src/index.js'),
   output: {
-    path: path.join(__dirname, "./dist"),
-    filename: "jtopo-min.js",
+    path: path.join(__dirname, './dist'),
+    filename: 'jtopo-min.js',
     library: 'JTopo',
     libraryExport: 'default',
     libraryTarget: 'umd'
   },
 
   devServer: {
-    contentBase: path.join(__dirname, "./public"),
+    contentBase: path.join(__dirname, './public'),
     clientLogLevel: 'warning',
     historyApiFallback: true,
     // hot: true,
@@ -25,7 +25,7 @@ const config = {
     before: function (app) {
       app.get('/demo/js/jtopo-min.js', function (req, res) {
         res.redirect('/jtopo-min.js')
-      });
+      })
     }
   },
 
@@ -48,7 +48,7 @@ const config = {
         test: /\.js$/,
         exclude: /(node_modules|bower_components)/,
         use: {
-          loader: "babel-loader"
+          loader: 'babel-loader'
         }
       }
     ]

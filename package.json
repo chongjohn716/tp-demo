@@ -15,16 +15,9 @@
     "sideEffects": false,
     "scripts": {
         "start": "node server.js",
-        "server": "webpack-dev-server -w --mode development",
-        "d": "webpack -w --mode development --debug --display-error-details",
-        "dev": "rollup -w -c scripts/config.js --environment TARGET:web-full-dev",
-        "dev:cjs": "rollup -w -c scripts/config.js --environment TARGET:web-runtime-cjs",
-        "dev:esm": "rollup -w -c scripts/config.js --environment TARGET:web-runtime-esm",
-        "dev:compiler": "rollup -w -c scripts/config.js --environment TARGET:web-compiler ",
-        "build": "node scripts/build.js",
-        "build:ssr": "npm run build -- web-runtime-cjs,web-server-renderer",
-        "lint": "eslint --fix src scripts test",
-        "sauce": "karma start test/unit/karma.sauce.config.js"
+        "dev": "webpack-dev-server -w --mode development",
+        "build": "webpack --mode production --display-error-details",
+        "lint": "eslint --fix src scripts test"
     },
     "gitHooks": {
         "pre-commit": "lint-staged",
