@@ -1,7 +1,7 @@
 import util from './util'
 import MessageBus from './message-bus'
 import { version } from './const'
-import { del } from './common'
+import { del, find } from './common'
 
 function createEagleEye(a) {
   return {

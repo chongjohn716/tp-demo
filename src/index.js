@@ -24,7 +24,7 @@ import Logo from './loge'
 import Layout from './layout'
 import { Effect, Animate } from './effect'
 
-import { createStageFromJson } from './common'
+import { createStageFromJson, extend } from './common'
 
 const JTopo = {
   Stage,
@@ -54,7 +54,9 @@ const JTopo = {
   Animate,
   util,
 
-  createStageFromJson
+  createStageFromJson,
+
+  extend
 }
 
 extendNative()

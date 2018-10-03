@@ -1,20 +1,11 @@
-var nodes = []
+function DeviceLink() {
 
-function drawNodes() {
-  nodeData.forEach(nd => {
-    const node = new DeviceNode(nd)
-    node.addTo(scene)
-    node.addTo(container, true)
-    nodes.push(node)
-  })
 }
 
-drawNodes()
+JTopo.extend(DeviceLink, JTopo.Link)
 
-function drawLinks() {
-  linkData.forEach(ld => {
-    const link = drawLink(ld)
-  })
+DeviceLink.prototype.setDirection = function (direction) {
+  this.link.direction = direction
 }
 
 function drawLink(data) {
@@ -104,5 +95,3 @@ function newFoldLink(nodeA, nodeZ, text, direction, dashedPattern) {
   container.add(link)
   return link;
 }
-
-// drawLinks()
