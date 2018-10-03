@@ -885,7 +885,7 @@
 	Stage.prototype.toJson = function () {
 		{
 			var b = this,
-				c = '{"version":"' + a.version + '",';
+				c = '{"version":"' + JTopo.version + '",';
 			this.serializedProperties.length
 		}
 		return this.serializedProperties.forEach(function (a) {
@@ -939,19 +939,20 @@
  * Scene 
  */
 (function (JTopo) {
-	function Scene(c) {
-		function d(a, b, c, d) {
-			return function (e) {
-				e.beginPath(),
-					e.strokeStyle = "rgba(0,0,236,0.5)",
-					e.fillStyle = "rgba(0,0,236,0.1)",
-					e.rect(a, b, c, d),
-					e.fill(),
-					e.stroke(),
-					e.closePath()
-			}
+	function SelectArea(a, b, c, d) {
+		return function (e) {
+			e.beginPath(),
+				e.strokeStyle = "rgba(0,0,236,0.5)",
+				e.fillStyle = "rgba(0,0,236,0.1)",
+				e.rect(a, b, c, d),
+				e.fill(),
+				e.stroke(),
+				e.closePath()
 		}
-		var e = this;
+	}
+
+	function Scene(c) {
+
 		this.initialize()
 		null != c && (c.add(this), this.addTo(c)),
 
@@ -972,8 +973,6 @@
 	JTopo.extend(Scene, JTopo.Element)
 
 	Scene.prototype.initialize = function () {
-		// Scene.prototype.initialize.apply(this, arguments);
-
 		Scene.super.initialize.apply(this, arguments)
 		this.messageBus = new JTopo.util.MessageBus
 		this.elementType = "scene"
@@ -1152,9 +1151,9 @@
 	}
 
 	Scene.prototype.remove = function (b) {
-		this.childs = a.util.removeFromArray(this.childs, b);
+		this.childs = JTopo.util.removeFromArray(this.childs, b);
 		var c = this.zIndexMap[b.zIndex];
-		c && (this.zIndexMap[b.zIndex] = a.util.removeFromArray(c, b)),
+		c && (this.zIndexMap[b.zIndex] = JTopo.util.removeFromArray(c, b)),
 			b.removeHandler(this)
 	}
 
@@ -1228,9 +1227,9 @@
 		if (this.mouseDown = !0, this.mouseDownX = c.x, this.mouseDownY = c.y, this.mouseDownEvent = c, this.mode == JTopo.SceneMode.normal)
 			this.selectElement(c), (null == this.currentElement || this.currentElement instanceof JTopo.Link) && 1 == this.translate && (this.lastTranslateX = this.translateX, this.lastTranslateY = this.translateY);
 		else {
-			if (this.mode == a.SceneMode.drag && 1 == this.translate)
+			if (this.mode == JTopo.SceneMode.drag && 1 == this.translate)
 				return this.lastTranslateX = this.translateX, void (this.lastTranslateY = this.translateY);
-			this.mode == a.SceneMode.select ? this.selectElement(c) : this.mode == a.SceneMode.edit && (this.selectElement(c), (null == this.currentElement || this.currentElement instanceof a.Link) && 1 == this.translate && (this.lastTranslateX = this.translateX, this.lastTranslateY = this.translateY))
+			this.mode == JTopo.SceneMode.select ? this.selectElement(c) : this.mode == JTopo.SceneMode.edit && (this.selectElement(c), (null == this.currentElement || this.currentElement instanceof JTopo.Link) && 1 == this.translate && (this.lastTranslateX = this.translateX, this.lastTranslateY = this.translateY))
 		}
 		this.dispatchEvent("mousedown", c)
 	}
@@ -1271,8 +1270,8 @@
 			i = c >= g ? g : c,
 			j = Math.abs(a.dx) * this.scaleX,
 			k = Math.abs(a.dy) * this.scaleY,
-			l = new d(h, i, j, k);
-		e.clearOperations().addOperation(l),
+			l = new SelectArea(h, i, j, k);
+		this.clearOperations().addOperation(l),
 			b = a.x,
 			c = a.y,
 			f = this.mouseDownEvent.x,
@@ -1281,6 +1280,7 @@
 			i = c >= g ? g : c,
 			j = Math.abs(a.dx),
 			k = Math.abs(a.dy);
+		var e = this
 		for (var m = h + j, n = i + k, o = 0; o < e.childs.length; o++) {
 			var p = e.childs[o];
 			p.x > h && p.x + p.width < m && p.y > i && p.y + p.height < n && e.notInSelectedNodes(p) && (p.selectedHandler(a), e.addToSelected(p))
@@ -1294,7 +1294,7 @@
 		};
 		var c = this.toSceneEvent(b);
 		if (this.mode == JTopo.SceneMode.drag)
-			return void (this.stage.cursor = a.MouseCursor.open_hand);
+			return void (this.stage.cursor = JTopo.MouseCursor.open_hand);
 		this.mode == JTopo.SceneMode.normal ? this.stage.cursor = JTopo.MouseCursor.normal : this.mode == JTopo.SceneMode.select && (this.stage.cursor = JTopo.MouseCursor.normal);
 		var d = this.getElementByXY(c.x, c.y);
 		null != d ? (this.mouseOverelement && this.mouseOverelement !== d && (c.target = d, this.mouseOverelement.mouseoutHandler(c)), this.mouseOverelement = d, 0 == d.isMouseOver ? (c.target = d, d.mouseoverHandler(c), this.dispatchEvent("mouseover", c)) : (c.target = d, d.mousemoveHandler(c), this.dispatchEvent("mousemove", c))) : this.mouseOverelement ? (c.target = d, this.mouseOverelement.mouseoutHandler(c), this.mouseOverelement = null, this.dispatchEvent("mouseout", c)) : (c.target = null, this.dispatchEvent("mousemove", c))
@@ -1318,7 +1318,7 @@
 
 	Scene.prototype.dbclickHandler = function (a) {
 		var b = this.toSceneEvent(a);
-		this.currentElement ? (b.target = this.currentElement, this.currentElement.dbclickHandler(b)) : e.cancleAllSelected(),
+		this.currentElement ? (b.target = this.currentElement, this.currentElement.dbclickHandler(b)) : this.cancleAllSelected(),
 			this.dispatchEvent("dbclick", b)
 	}
 
@@ -1381,7 +1381,7 @@
 	}
 
 	Scene.prototype.getElementsBound = function () {
-		return a.util.getElementsBound(this.childs)
+		return JTopo.util.getElementsBound(this.childs)
 	}
 
 	Scene.prototype.translateToCenter = function (a) {
@@ -1418,8 +1418,8 @@
 
 	Scene.prototype.getCenterLocation = function () {
 		return {
-			x: e.stage.canvas.width / 2,
-			y: e.stage.canvas.height / 2
+			x: this.stage.canvas.width / 2,
+			y: this.stage.canvas.height / 2
 		}
 	}
 
@@ -1717,7 +1717,7 @@
 			e = function (a) {
 				c.call(d, a)
 			};
-		return this.messageBus || (this.messageBus = new a.util.MessageBus),
+		return this.messageBus || (this.messageBus = new JTopo.util.MessageBus),
 			this.messageBus.subscribe(b, e),
 			this
 	}
@@ -1730,6 +1730,8 @@
 	InteractiveElement.prototype.removeAllEventListener = function () {
 		this.messageBus = new a.util.MessageBus
 	};
+
+
 
 	function EditableElement() {
 
@@ -1853,6 +1855,7 @@
 			this.dispatchEvent("resize", a)
 		}
 	}
+
 	JTopo.DisplayElement = DisplayElement
 	JTopo.InteractiveElement = InteractiveElement
 	JTopo.EditableElement = EditableElement
@@ -2297,9 +2300,11 @@
 			f = JTopo.util.intersectionLineBound(d, e);
 		return f
 	}
+
+	var minus270 = - (Math.PI / 2 + Math.PI / 4);
+
 	function Link(b, c, g) {
 		this.initialize(b, c, g)
-		var i = - (Math.PI / 2 + Math.PI / 4);
 	}
 	JTopo.extend(Link, JTopo.InteractiveElement)
 
@@ -2480,7 +2485,7 @@
 			return
 		}
 
-		this.paintArrow(b, d, c, true)
+		this.bothArrow && this.paintArrow(b, d, c, true)
 	}
 	Link.prototype.paint = function (a) {
 		if (null != this.nodeA && null != !this.nodeZ) {
@@ -2505,8 +2510,8 @@
 				h = a.measureText("田").width;
 			if (a.fillStyle = "rgba(" + this.fontColor + ", " + this.alpha + ")", this.nodeA === this.nodeZ) {
 				var j = this.bundleGap * (this.nodeIndex + 1) / 2,
-					e = this.nodeA.x + j * Math.cos(i),
-					f = this.nodeA.y + j * Math.sin(i);
+					e = this.nodeA.x + j * Math.cos(minus270),
+					f = this.nodeA.y + j * Math.sin(minus270);
 				a.fillText(this.text, e, f)
 			} else
 				a.fillText(this.text, e - g / 2, f - h / 2);
@@ -2524,7 +2529,7 @@
 	Link.prototype.isInBound = function (b, c) {
 		if (this.nodeA === this.nodeZ) {
 			var d = this.bundleGap * (this.nodeIndex + 1) / 2,
-				e = a.util.getDistance(this.nodeA, {
+				e = JTopo.util.getDistance(this.nodeA, {
 					x: b,
 					y: c
 				}) - d;
@@ -2551,7 +2556,7 @@
 	JTopo.extend(FoldLink, Link)
 
 	FoldLink.prototype.initialize = function () {
-		FoldLink.prototype.initialize.apply(this, arguments),
+		FoldLink.super.initialize.apply(this, arguments),
 			this.direction = "horizontal"
 	}
 	FoldLink.prototype.getStartPosition = function () {
@@ -2627,7 +2632,7 @@
 	JTopo.extend(FlexionalLink, Link)
 
 	FlexionalLink.prototype.initialize = function () {
-		FlexionalLink.prototype.initialize.apply(this, arguments),
+		FlexionalLink.super.initialize.apply(this, arguments),
 			this.direction = "vertical",
 			this.offsetGap = 44
 	}
@@ -2694,7 +2699,7 @@
 
 
 	CurveLink.prototype.initialize = function () {
-		CurveLink.prototype.initialize.apply(this, arguments)
+		CurveLink.super.initialize.apply(this, arguments)
 	}
 	CurveLink.prototype.paintPath = function (a, b) {
 		if (this.nodeA === this.nodeZ)
@@ -3029,12 +3034,12 @@
 	function i(a, b, c, d) {
 		b.x += c,
 			b.y += d;
-		for (var e = q(a, b), f = 0; f < e.length; f++)
+		for (var e = getNodeChilds(a, b), f = 0; f < e.length; f++)
 			i(a, e[f], c, d)
 	}
 	function j(a, b) {
 		function c(b, e) {
-			var f = q(a, b);
+			var f = getNodeChilds(a, b);
 			null == d[e] && (d[e] = {}, d[e].nodes = [], d[e].childs = []),
 				d[e].nodes.push(b),
 				d[e].childs.push(f);
@@ -3207,12 +3212,12 @@
 		return d
 	}
 	function layoutNode(a, b, c) {
-		var d = q(a.childs, b);
+		var d = getNodeChilds(a.childs, b);
 		if (0 == d.length)
 			return null;
-		if (p(b, d), 1 == c)
+		if (adjustPosition(b, d), 1 == c)
 			for (var e = 0; e < d.length; e++)
-				r(a, d[e], c);
+				layoutNode(a, d[e], c);
 		return null
 	}
 	function springLayout(b, c) {
@@ -3245,7 +3250,7 @@
 	}
 	function getTreeDeep(a, b) {
 		function c(a, b, e) {
-			var f = q(a, b);
+			var f = getNodeChilds(a, b);
 			e > d && (d = e);
 			for (var g = 0; g < f.length; g++)
 				c(a, f[g], e + 1)
@@ -3402,7 +3407,7 @@
 					this
 			},
 			onStop: function (b) {
-				return null == e && (e = new a.util.MessageBus),
+				return null == e && (e = new JTopo.util.MessageBus),
 					e.subscribe("stop", b),
 					this
 			}
@@ -3566,7 +3571,7 @@
 	}
 	function dividedTwoPiece(b, c) {
 		function d(c, d, e, f, g) {
-			var h = new a.Node;
+			var h = new JTopo.Node;
 			return h.setImage(b.image),
 				h.setSize(b.width, b.height),
 				h.setLocation(c, d),
@@ -3591,7 +3596,7 @@
 			b.visible = !1,
 				e.add(h),
 				e.add(j),
-				a.Animate.gravity(h, {
+				JTopo.Animate.gravity(h, {
 					context: e,
 					dx: .3
 				}).run().onStop(function () {
@@ -3599,7 +3604,7 @@
 						e.remove(j),
 						i.stop()
 				}),
-				a.Animate.gravity(j, {
+				JTopo.Animate.gravity(j, {
 					context: e,
 					dx: - .2
 				}).run()
@@ -3678,7 +3683,7 @@
 			g = c.p2,
 			h = (c.context, f.x + (g.x - f.x) / 2),
 			i = f.y + (g.y - f.y) / 2,
-			j = a.util.getDistance(f, g) / 2,
+			j = JTopo.util.getDistance(f, g) / 2,
 			k = Math.atan2(i, h),
 			l = c.speed || .2,
 			m = {},
@@ -3767,6 +3772,7 @@
  * find method
  */
 (function (JTopo) {
+	var e = "click,mousedown,mouseup,mouseover,mouseout,mousedrag,keydown,keyup".split(",");
 	function b(a, b) {
 		var c = [];
 		if (0 == a.length)
@@ -3849,7 +3855,6 @@
 		return g = "function" == typeof d ? f.filter(d) : b(f, d),
 			g = c(g)
 	}
-	var e = "click,mousedown,mouseup,mouseover,mouseout,mousedrag,keydown,keyup".split(",");
 	JTopo.Stage.prototype.find = find
 	JTopo.Scene.prototype.find = find
 }(JTopo));

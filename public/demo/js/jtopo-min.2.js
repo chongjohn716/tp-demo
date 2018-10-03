@@ -1731,6 +1731,8 @@
 		this.messageBus = new a.util.MessageBus
 	};
 
+
+
 	function EditableElement() {
 
 	}
@@ -1853,6 +1855,7 @@
 			this.dispatchEvent("resize", a)
 		}
 	}
+
 	JTopo.DisplayElement = DisplayElement
 	JTopo.InteractiveElement = InteractiveElement
 	JTopo.EditableElement = EditableElement
@@ -3568,7 +3571,7 @@
 	}
 	function dividedTwoPiece(b, c) {
 		function d(c, d, e, f, g) {
-			var h = new a.Node;
+			var h = new JTopo.Node;
 			return h.setImage(b.image),
 				h.setSize(b.width, b.height),
 				h.setLocation(c, d),
@@ -3593,7 +3596,7 @@
 			b.visible = !1,
 				e.add(h),
 				e.add(j),
-				a.Animate.gravity(h, {
+				JTopo.Animate.gravity(h, {
 					context: e,
 					dx: .3
 				}).run().onStop(function () {
@@ -3601,7 +3604,7 @@
 						e.remove(j),
 						i.stop()
 				}),
-				a.Animate.gravity(j, {
+				JTopo.Animate.gravity(j, {
 					context: e,
 					dx: - .2
 				}).run()
@@ -3769,6 +3772,7 @@
  * find method
  */
 (function (JTopo) {
+	var e = "click,mousedown,mouseup,mouseover,mouseout,mousedrag,keydown,keyup".split(",");
 	function b(a, b) {
 		var c = [];
 		if (0 == a.length)
@@ -3851,7 +3855,6 @@
 		return g = "function" == typeof d ? f.filter(d) : b(f, d),
 			g = c(g)
 	}
-	var e = "click,mousedown,mouseup,mouseover,mouseout,mousedrag,keydown,keyup".split(",");
 	JTopo.Stage.prototype.find = find
 	JTopo.Scene.prototype.find = find
 }(JTopo));

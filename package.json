@@ -1,13 +1,71 @@
 {
     "name": "jtopo",
-    "version": "1.0.0",
-    "author": "wdy",
-    "description": "The first bae nodejs app!",
+    "version": "0.0.1",
+    "description": "Reactive, component-oriented view layer for modern web interfaces.",
+    "main": "dist/vue.runtime.common.js",
+    "module": "dist/vue.runtime.esm.js",
+    "unpkg": "dist/vue.js",
+    "jsdelivr": "dist/vue.js",
+    "typings": "types/index.d.ts",
+    "files": [
+        "src",
+        "dist/*.js",
+        "types/*.d.ts"
+    ],
+    "sideEffects": false,
     "scripts": {
-        "start": "node server.js"
+        "start": "node server.js",
+        "server": "webpack-dev-server -w --mode development",
+        "d": "webpack -w --mode development --debug --display-error-details",
+        "dev": "rollup -w -c scripts/config.js --environment TARGET:web-full-dev",
+        "dev:cjs": "rollup -w -c scripts/config.js --environment TARGET:web-runtime-cjs",
+        "dev:esm": "rollup -w -c scripts/config.js --environment TARGET:web-runtime-esm",
+        "dev:compiler": "rollup -w -c scripts/config.js --environment TARGET:web-compiler ",
+        "build": "node scripts/build.js",
+        "build:ssr": "npm run build -- web-runtime-cjs,web-server-renderer",
+        "lint": "eslint --fix src scripts test",
+        "sauce": "karma start test/unit/karma.sauce.config.js"
     },
-    "dependencies": {
-        "express": "3.4.2",
-        "mysql": "2.5.2"
+    "gitHooks": {
+        "pre-commit": "lint-staged",
+        "commit-msg": "node scripts/verify-commit-msg.js"
+    },
+    "lint-staged": {
+        "*.js": [
+            "eslint --fix",
+            "git add"
+        ]
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/vuejs/vue.git"
+    },
+    "keywords": [
+        "jtopo"
+    ],
+    "author": "Evan You",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/vuejs/vue/issues"
+    },
+    "homepage": "https://github.com/vuejs/vue#readme",
+    "devDependencies": {
+        "@babel/core": "^7.1.2",
+        "@babel/plugin-transform-runtime": "^7.1.0",
+        "@babel/preset-env": "^7.1.0",
+        "babel-eslint": "^10.0.1",
+        "babel-loader": "^8.0.4",
+        "eslint": "^5.6.1",
+        "eslint-config-standard": "^12.0.0",
+        "eslint-friendly-formatter": "^4.0.1",
+        "eslint-loader": "^2.1.1",
+        "webpack": "^4.20.2",
+        "webpack-cli": "^3.1.2",
+        "webpack-dev-server": "^3.1.9"
+    },
+    "config": {
+        "commitizen": {
+            "path": "./node_modules/cz-conventional-changelog"
+        }
     }
 }
