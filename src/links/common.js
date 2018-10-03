@@ -13,21 +13,25 @@ export function b(a, b) {
   }
   return c
 }
+
 export function c(a, c) {
   var d = b(a, c),
     e = b(c, a),
     f = d.concat(e)
   return f
 }
+
 export function d(a) {
   var b = c(a.nodeA, a.nodeZ)
-  return b = b.filter(function (b) {
+  return b.filter(function (b) {
     return a !== b
   })
 }
+
 export function e(a, b) {
   return c(a, b).length
 }
+
 export function h(b, c) {
   var d = util.lineF(b.cx, b.cy, c.cx, c.cy),
     e = b.getBound(),

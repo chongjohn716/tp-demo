@@ -25,8 +25,7 @@ MessageBus.prototype.publish = function (a, c, d) {
         setTimeout(function () {
           a(b)
         }, 10)
-      }
-      (e[f], c)) : e[f](c)
+      }(e[f], c)) : e[f](c)
     }
   }
 }

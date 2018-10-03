@@ -33,14 +33,14 @@ Container.prototype.initialize = function (text) {
   this.layout = new layout.AutoBoundLayout()
 }
 Container.prototype.add = function (a) {
-  this.childs.push(a),
+  this.childs.push(a)
   a.dragable = this.childDragble
 }
 Container.prototype.remove = function (a) {
   for (var b = 0; b < this.childs.length; b++) {
     if (this.childs[b] === a) {
-      a.parentContainer = null,
-      this.childs = del.call(this.childs, b),
+      a.parentContainer = null
+      this.childs = del.call(this.childs, b)
       a.lastParentContainer = this
       break
     }
@@ -52,7 +52,7 @@ Container.prototype.removeAll = function () {
 Container.prototype.setLocation = function (a, b) {
   var c = a - this.x,
     d = b - this.y
-  this.x = a,
+  this.x = a
   this.y = b
   for (var e = 0; e < this.childs.length; e++) {
     var f = this.childs[e]
@@ -67,31 +67,33 @@ Container.prototype.paint = function (a) {
 }
 Container.prototype.paintBorder = function (a) {
   if (this.borderWidth != 0) {
-    a.beginPath(),
-    a.lineWidth = this.borderWidth,
+    a.beginPath()
+    a.lineWidth = this.borderWidth
     a.strokeStyle = 'rgba(' + this.borderColor + ',' + this.alpha + ')'
     var b = this.borderWidth / 2
-    this.borderRadius == null || this.borderRadius == 0 ? a.rect(this.x - b, this.y - b, this.width + this.borderWidth, this.height + this.borderWidth) : a.JTopoRoundRect(this.x - b, this.y - b, this.width + this.borderWidth, this.height + this.borderWidth, this.borderRadius),
-    a.stroke(),
+    this.borderRadius == null || this.borderRadius == 0 ? a.rect(this.x - b, this.y - b, this.width + this.borderWidth, this.height + this.borderWidth) : a.JTopoRoundRect(this.x - b, this.y - b, this.width + this.borderWidth, this.height + this.borderWidth, this.borderRadius)
+    a.stroke()
     a.closePath()
   }
 }
 Container.prototype.paintText = function (a) {
   var b = this.text
   if (b != null && b != '') {
-    a.beginPath(),
+    a.beginPath()
     a.font = this.font
     var c = a.measureText(b).width,
       d = a.measureText('田').width
+
     a.fillStyle = 'rgba(' + this.fontColor + ', ' + this.alpha + ')'
     var e = this.getTextPostion(this.textPosition, c, d)
-    a.fillText(b, e.x, e.y),
+
+    a.fillText(b, e.x, e.y)
     a.closePath()
   }
 }
 Container.prototype.getTextPostion = function (a, b, c) {
   var d = null
-  return a == null || a == 'Bottom_Center' ? d = {
+  a == null || a == 'Bottom_Center' ? d = {
     x: this.x + this.width / 2 - b / 2,
     y: this.y + this.height + c
   }
@@ -126,16 +128,18 @@ Container.prototype.getTextPostion = function (a, b, c) {
                   : a == 'Middle_Left' && (d = {
                     x: this.x,
                     y: this.y + this.height / 2 + c / 2
-                  }),
-  this.textOffsetX != null && (d.x += this.textOffsetX),
-  this.textOffsetY != null && (d.y += this.textOffsetY),
-  d
+                  })
+  this.textOffsetX != null && (d.x += this.textOffsetX)
+  this.textOffsetY != null && (d.y += this.textOffsetY)
+  return d
 }
+
 Container.prototype.paintMouseover = function () { }
+
 Container.prototype.paintSelected = function (a) {
-  a.shadowBlur = 10,
-  a.shadowColor = 'rgba(0,0,0,1)',
-  a.shadowOffsetX = 0,
+  a.shadowBlur = 10
+  a.shadowColor = 'rgba(0,0,0,1)'
+  a.shadowOffsetX = 0
   a.shadowOffsetY = 0
 }
 

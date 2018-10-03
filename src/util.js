@@ -5,11 +5,17 @@ const graphics = canvas.getContext('2d')
 const alarmImageCache = {}
 
 function getDistance(a, b, c, d) {
-  var e,
-    f
-  return c == null && d == null ? (e = b.x - a.x, f = b.y - a.y) : (e = c - a, f = d - b),
-  Math.sqrt(e * e + f * f)
+  var e, f
+  if (c == null && d == null) {
+    e = b.x - a.x
+    f = b.y - a.y
+  } else {
+    e = c - a
+    f = d - b
+  }
+  return Math.sqrt(e * e + f * f)
 }
+
 function getElementsBound(a) {
   for (var b = {
       left: Number.MAX_VALUE,
@@ -20,17 +26,17 @@ function getElementsBound(a) {
     var d = a[c]
     d instanceof JTopo.Link || (b.left > d.x && (b.left = d.x, b.leftNode = d), b.right < d.x + d.width && (b.right = d.x + d.width, b.rightNode = d), b.top > d.y && (b.top = d.y, b.topNode = d), b.bottom < d.y + d.height && (b.bottom = d.y + d.height, b.bottomNode = d))
   }
-  return b.width = b.right - b.left,
-  b.height = b.bottom - b.top,
-  b
+  b.width = b.right - b.left
+  b.height = b.bottom - b.top
+  return b
 }
 function mouseCoords(a) {
-  return a = cloneEvent(a),
-  a.pageX || (a.pageX = a.clientX + document.body.scrollLeft - document.body.clientLeft, a.pageY = a.clientY + document.body.scrollTop - document.body.clientTop),
-  a
+  a = cloneEvent(a)
+  a.pageX || (a.pageX = a.clientX + document.body.scrollLeft - document.body.clientLeft, a.pageY = a.clientY + document.body.scrollTop - document.body.clientTop)
+  return a
 }
 function getEventPosition(a) {
-  return a = mouseCoords(a)
+  return mouseCoords(a)
 }
 function rotatePoint(a, b, c, d, e) {
   var f = c - a,
@@ -91,7 +97,7 @@ function getProperties(a, b) {
   for (var c = '', d = 0; d < b.length; d++) {
     d > 0 && (c += ',')
     var e = a[b[d]]
-    typeof e == 'string' ? e = '"' + e + '"' : void 0 == e && (e = null),
+    typeof e == 'string' ? e = '"' + e + '"' : void 0 == e && (e = null)
     c += b[d] + ':' + e
   }
   return c
@@ -99,19 +105,26 @@ function getProperties(a, b) {
 function loadStageFromJson(stageObj, canvas) {
   var stage = new JTopo.Stage(canvas)
   for (var k in stageObj) {
-    if (k != 'scenes') { stage[k] = obj[k] } else {
-      for (var scenes = obj.scenes, i = 0; i < scenes.length; i++) {
+    if (k != 'scenes') {
+      stage[k] = stageObj[k]
+    } else {
+      for (var scenes = stageObj.scenes, i = 0; i < scenes.length; i++) {
         var sceneObj = scenes[i],
           scene = new JTopo.Scene(stage)
         for (var p in sceneObj) {
-          if (p != 'elements') { scene[p] = sceneObj[p] } else {
-            for (var nodeMap = {}, elements = sceneObj.elements, m = 0; m < elements.length; m++) {
+          if (p != 'elements') {
+            scene[p] = sceneObj[p]
+          } else {
+            var nodeMap = {}, elements = sceneObj.elements
+            for (var m = 0; m < elements.length; m++) {
               var elementObj = elements[m],
                 type = elementObj.elementType,
                 element
               type == 'Node' && (element = new JTopo.Node())
-              for (var mk in elementObj) { element[mk] = elementObj[mk] }
-              nodeMap[element.text] = element,
+              for (var mk in elementObj) {
+                element[mk] = elementObj[mk]
+              }
+              nodeMap[element.text] = element
               scene.add(element)
             }
           }
@@ -119,31 +132,32 @@ function loadStageFromJson(stageObj, canvas) {
       }
     }
   }
-  return console.log(stage),
-  stage
+
+  return stage
 }
 function toJson(a) {
   var b = 'backgroundColor,visible,mode,rotate,alpha,scaleX,scaleY,shadow,translateX,translateY,areaSelect,paintAll'.split(','),
     c = 'text,elementType,x,y,width,height,visible,alpha,rotate,scaleX,scaleY,fillColor,shadow,transformAble,zIndex,dragable,selected,showSelected,font,fontColor,textPosition,textOffsetX,textOffsetY'.split(','),
     d = '{'
-  d += 'frames:' + a.frames,
+  d += 'frames:' + a.frames
   d += ', scenes:['
   for (var e = 0; e < a.childs.length; e++) {
     var f = a.childs[e]
-    d += '{',
-    d += getProperties(f, b),
+    d += '{'
+    d += getProperties(f, b)
     d += ', elements:['
     for (var g = 0; g < f.childs.length; g++) {
       var h = f.childs[g]
-      g > 0 && (d += ','),
-      d += '{',
-      d += getProperties(h, c),
+      g > 0 && (d += ',')
+      d += '{'
+      d += getProperties(h, c)
       d += '}'
     }
     d += ']}'
   }
-  return d += ']',
+  d += ']'
   d += '}'
+  return d
 }
 function changeColor(a, b, c) {
   var d = c.split(','),
@@ -152,7 +166,7 @@ function changeColor(a, b, c) {
     g = parseInt(d[2]),
     h = canvas.width = b.width,
     i = canvas.height = b.height
-  a.clearRect(0, 0, canvas.width, canvas.height),
+  a.clearRect(0, 0, canvas.width, canvas.height)
   a.drawImage(b, 0, 0)
   for (var j = a.getImageData(0, 0, b.width, b.height), k = j.data, l = 0; h > l; l++) {
     for (var m = 0; i > m; m++) {
@@ -168,9 +182,9 @@ function genImageAlarm(a, b) {
   var c = a.src + b
   if (alarmImageCache[c]) { return alarmImageCache[c] }
   var d = new Image()
-  return d.src = changeColor(graphics, a, b),
-  alarmImageCache[c] = d,
-  d
+  d.src = changeColor(graphics, a, b)
+  alarmImageCache[c] = d
+  return d
 }
 function getOffsetPosition(a) {
   if (!a) {
@@ -181,9 +195,21 @@ function getOffsetPosition(a) {
   }
   var b = 0,
     c = 0
-  if ('getBoundingClientRect' in document.documentElement) { var d = a.getBoundingClientRect(), e = a.ownerDocument, f = e.body, g = e.documentElement, h = g.clientTop || f.clientTop || 0, i = g.clientLeft || f.clientLeft || 0, b = d.top + (self.pageYOffset || g && g.scrollTop || f.scrollTop) - h, c = d.left + (self.pageXOffset || g && g.scrollLeft || f.scrollLeft) - i } else {
-    do { b += a.offsetTop || 0, c += a.offsetLeft || 0, a = a.offsetParent }
-    while (a)
+  if ('getBoundingClientRect' in document.documentElement) {
+    var d = a.getBoundingClientRect(),
+      e = a.ownerDocument,
+      f = e.body,
+      g = e.documentElement,
+      h = g.clientTop || f.clientTop || 0,
+      i = g.clientLeft || f.clientLeft || 0
+    b = d.top + (self.pageYOffset || (g && g.scrollTop) || f.scrollTop) - h
+    c = d.left + (self.pageXOffset || (g && g.scrollLeft) || f.scrollLeft) - i
+  } else {
+    do {
+      b += a.offsetTop || 0
+      c += a.offsetLeft || 0
+      a = a.offsetParent
+    } while (a)
   }
   return {
     left: c,
@@ -194,15 +220,16 @@ function lineF(a, b, c, d) {
   function e(a) {
     return a * f + g
   }
-  var f = (d - b) / (c - a),
-    g = b - a * f
-  return e.k = f,
-  e.b = g,
-  e.x1 = a,
-  e.x2 = c,
-  e.y1 = b,
-  e.y2 = d,
-  e
+  var f = (d - b) / (c - a), g = b - a * f
+
+  e.k = f
+  e.b = g
+  e.x1 = a
+  e.x2 = c
+  e.y1 = b
+  e.y2 = d
+
+  return e
 }
 function inRange(a, b, c) {
   var d = Math.abs(b - c),
@@ -215,18 +242,20 @@ function isPointInLineSeg(a, b, c) {
   return inRange(a, c.x1, c.x2) && inRange(b, c.y1, c.y2)
 }
 function intersection(a, b) {
-  var c,
-    d
+  var c, d
+
+  /* eslint-disable */
   return a.k == b.k ? null : (1 / 0 == a.k || a.k == -1 / 0 ? (c = a.x1, d = b(a.x1)) : 1 / 0 == b.k || b.k == -1 / 0 ? (c = b.x1, d = a(b.x1)) : (c = (b.b - a.b) / (a.k - b.k), d = a(c)), isPointInLineSeg(c, d, a) == 0 ? null : isPointInLineSeg(c, d, b) == 0 ? null : {
     x: c,
     y: d
   })
+  /* eslint-enable */
 }
 function intersectionLineBound(a, b) {
   var c = lineF(b.left, b.top, b.left, b.bottom),
     d = intersection(a, c)
-  return d == null && (c = lineF(b.left, b.top, b.right, b.top), d = intersection(a, c), d == null && (c = lineF(b.right, b.top, b.right, b.bottom), d = intersection(a, c), d == null && (c = lineF(b.left, b.bottom, b.right, b.bottom), d = intersection(a, c)))),
-  d
+  d == null && (c = lineF(b.left, b.top, b.right, b.top), d = intersection(a, c), d == null && (c = lineF(b.right, b.top, b.right, b.bottom), d = intersection(a, c), d == null && (c = lineF(b.left, b.bottom, b.right, b.bottom), d = intersection(a, c))))
+  return d
 }
 
 const util = {

@@ -269,6 +269,7 @@
 			return c
 		}
 		function loadStageFromJson(json, canvas) {
+			debugger
 			var obj = eval(json),
 				stage = new JTopo.Stage(canvas);
 			for (var k in stageObj)

@@ -11,7 +11,6 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "start": "node server.js",
     "dev": "webpack-dev-server -w --mode development",
     "build": "webpack --mode production --display-error-details",
     "lint": "eslint --fix src"

@@ -4,9 +4,9 @@ function Element() {
 }
 
 Element.prototype.initialize = function () {
-  this.elementType = 'element',
-  this.serializedProperties = ['elementType'],
-  this.propertiesStack = [],
+  this.elementType = 'element'
+  this.serializedProperties = ['elementType']
+  this.propertiesStack = []
   this._id = '' + (new Date()).getTime()
 }
 
@@ -21,9 +21,10 @@ Element.prototype.attr = function (a, b) {
 Element.prototype.save = function () {
   var a = this,
     b = {}
+
   this.serializedProperties.forEach(function (c) {
     b[c] = a[c]
-  }),
+  })
   this.propertiesStack.push(b)
 }
 
@@ -41,13 +42,15 @@ Element.prototype.toJson = function () {
   var a = this,
     b = '{',
     c = this.serializedProperties.length
-  return this.serializedProperties.forEach(function (d, e) {
+  this.serializedProperties.forEach(function (d, e) {
     var f = a[d]
-    typeof f === 'string' && (f = '"' + f + '"'),
-    b += '"' + d + '":' + f,
+    typeof f === 'string' && (f = '"' + f + '"')
+    b += '"' + d + '":' + f
     c > e + 1 && (b += ',')
-  }),
+  })
   b += '}'
+
+  return b
 }
 
 export default Element

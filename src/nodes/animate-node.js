@@ -1,59 +1,68 @@
 import Node from './node'
 import { extend } from '../common'
 
-function g(a, b, c) {
-  this.initialize(),
-  this.frameImages = a || [],
-  this.frameIndex = 0,
+function G(a, b, c) {
+  this.initialize()
+  this.frameImages = a || []
+  this.frameIndex = 0
   this.isStop = !0
   var d = b || 1e3
   this.repeatPlay = !1
   var e = this
   this.nextFrame = function () {
     if (!this.isStop && this.frameImages.length != null) {
-      if (this.frameIndex++, this.frameIndex >= this.frameImages.length) {
+      this.frameIndex++
+      if (this.frameIndex >= this.frameImages.length) {
         if (!this.repeatPlay) { return }
         this.frameIndex = 0
       }
-      this.setImage(this.frameImages[this.frameIndex], c),
+      this.setImage(this.frameImages[this.frameIndex], c)
       setTimeout(function () {
         e.nextFrame()
       }, d / a.length)
     }
   }
 }
-function h(a, b, c, d, e) {
+function H(a, b, c, d, e) {
   this.initialize()
   var f = this
-  this.setImage(a),
-  this.frameIndex = 0,
-  this.isPause = !0,
+  this.setImage(a)
+  this.frameIndex = 0
+  this.isPause = !0
   this.repeatPlay = !1
+
   var g = d || 1e3
-  e = e || 0,
+
+  e = e || 0
+
   this.paint = function (a) {
     if (this.image) {
       var b = this.width,
         d = this.height
-      a.save(),
-      a.beginPath(),
+
+      a.save()
+      a.beginPath()
       a.fillStyle = 'rgba(' + this.fillColor + ',' + this.alpha + ')'
       var f = (Math.floor(this.frameIndex / c) + e) * d,
         g = Math.floor(this.frameIndex % c) * b
-      a.drawImage(this.image, g, f, b, d, -b / 2, -d / 2, b, d),
-      a.fill(),
-      a.closePath(),
-      a.restore(),
-      this.paintText(a),
-      this.paintBorder(a),
-      this.paintCtrl(a),
+      a.drawImage(this.image, g, f, b, d, -b / 2, -d / 2, b, d)
+      a.fill()
+      a.closePath()
+      a.restore()
+      this.paintText(a)
+      this.paintBorder(a)
+      this.paintCtrl(a)
       this.paintAlarmText(a)
     }
-  },
+  }
+
   this.nextFrame = function () {
     if (!this.isStop) {
-      if (this.frameIndex++, this.frameIndex >= b * c) {
-        if (!this.repeatPlay) { return }
+      this.frameIndex++
+      if (this.frameIndex >= b * c) {
+        if (!this.repeatPlay) {
+          return
+        }
         this.frameIndex = 0
       }
       setTimeout(function () {
@@ -64,20 +73,20 @@ function h(a, b, c, d, e) {
 }
 function AnimateNode() {
   var a = null
-  return a = arguments.length <= 3 ? new g(arguments[0], arguments[1], arguments[2]) : new h(arguments[0], arguments[1], arguments[2], arguments[3], arguments[4], arguments[5]),
+  a = arguments.length <= 3 ? new G(arguments[0], arguments[1], arguments[2]) : new H(arguments[0], arguments[1], arguments[2], arguments[3], arguments[4], arguments[5])
   a.stop = function () {
     a.isStop = !0
-  },
+  }
   a.play = function () {
-    a.isStop = !1,
-    a.frameIndex = 0,
+    a.isStop = !1
+    a.frameIndex = 0
     a.nextFrame()
-  },
-  a
+  }
+  return a
 }
 
-extend(g, Node)
-extend(h, Node)
+extend(G, Node)
+extend(H, Node)
 extend(AnimateNode, Node)
 
 export default AnimateNode

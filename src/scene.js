@@ -12,33 +12,34 @@ import {
 } from './const'
 function SelectArea(a, b, c, d) {
   return function (e) {
-    e.beginPath(),
-    e.strokeStyle = 'rgba(0,0,236,0.5)',
-    e.fillStyle = 'rgba(0,0,236,0.1)',
-    e.rect(a, b, c, d),
-    e.fill(),
-    e.stroke(),
+    e.beginPath()
+    e.strokeStyle = 'rgba(0,0,236,0.5)'
+    e.fillStyle = 'rgba(0,0,236,0.1)'
+    e.rect(a, b, c, d)
+    e.fill()
+    e.stroke()
     e.closePath()
   }
 }
 
 function Scene(c) {
   this.initialize()
-  c != null && (c.add(this), this.addTo(c)),
+  c != null && (c.add(this), this.addTo(c))
 
-  this.touchstart = this.mousedownHander,
-  this.touchmove = this.mousedragHandler,
+  this.touchstart = this.mousedownHander
+  this.touchmove = this.mousedragHandler
   this.touchend = this.mousedownHander
-  var f = 'click,dbclick,mousedown,mouseup,mouseover,mouseout,mousemove,mousedrag,mousewheel,touchstart,touchmove,touchend,keydown,keyup'.split(','),
-    g = this
-  f.forEach(function (a) {
-    g[a] = function (b) {
+  var f = 'click,dbclick,mousedown,mouseup,mouseover,mouseout,mousemove,mousedrag,mousewheel,touchstart,touchmove,touchend,keydown,keyup'.split(',')
+  f.forEach((a) => {
+    this[a] = function (b) {
       b != null ? this.addEventListener(a, b) : this.dispatchEvent(a)
     }
   })
 }
 
 extend(Scene, Element)
+
+Scene.prototype.find = find
 
 Scene.prototype.initialize = function () {
   Scene.super.initialize.apply(this, arguments)
@@ -89,14 +90,19 @@ Scene.prototype.hide = function () {
 
 Scene.prototype.paint = function (a) {
   if (this.visible != 0 && this.stage != null) {
-    if (a.save(), this.paintBackgroud(a), a.restore(), a.save(), a.scale(this.scaleX, this.scaleY), this.translate == 1) {
+    a.save()
+    this.paintBackgroud(a)
+    a.restore()
+    a.save()
+    a.scale(this.scaleX, this.scaleY)
+    if (this.translate == 1) {
       var b = this.getOffsetTranslate(a)
       a.translate(b.translateX, b.translateY)
     }
-    this.paintChilds(a),
-    a.restore(),
-    a.save(),
-    this.paintOperations(a, this.operations),
+    this.paintChilds(a)
+    a.restore()
+    a.save()
+    this.paintOperations(a, this.operations)
     a.restore()
   }
 }
@@ -132,15 +138,16 @@ Scene.prototype.paintChilds = function (b) {
     for (var d = this.zIndexArray[c], e = this.zIndexMap[d], f = 0; f < e.length; f++) {
       var g = e[f]
       if (this.paintAll == 1 || this.isVisiable(g)) {
-        if (b.save(), g.transformAble == 1) {
+        b.save()
+        if (g.transformAble == 1) {
           var h = g.getCenterLocation()
-          b.translate(h.x, h.y),
-          g.rotate && b.rotate(g.rotate),
+          b.translate(h.x, h.y)
+          g.rotate && b.rotate(g.rotate)
           g.scaleX && g.scaleY ? b.scale(g.scaleX, g.scaleY) : g.scaleX ? b.scale(g.scaleX, 1) : g.scaleY && b.scale(1, g.scaleY)
         }
-        g.shadow == 1 && (b.shadowBlur = g.shadowBlur, b.shadowColor = g.shadowColor, b.shadowOffsetX = g.shadowOffsetX, b.shadowOffsetY = g.shadowOffsetY),
-        g instanceof InteractiveElement && (g.selected && g.showSelected == 1 && g.paintSelected(b), g.isMouseOver == 1 && g.paintMouseover(b)),
-        g.paint(b),
+        g.shadow == 1 && (b.shadowBlur = g.shadowBlur, b.shadowColor = g.shadowColor, b.shadowOffsetX = g.shadowOffsetX, b.shadowOffsetY = g.shadowOffsetY)
+        g instanceof InteractiveElement && (g.selected && g.showSelected == 1 && g.paintSelected(b), g.isMouseOver == 1 && g.paintMouseover(b))
+        g.paint(b)
         b.restore()
       }
     }
@@ -166,10 +173,13 @@ Scene.prototype.isVisiable = function (b) {
   var c = this.getOffsetTranslate(),
     d = b.x + c.translateX,
     e = b.y + c.translateY
-  d *= this.scaleX,
+
+  d *= this.scaleX
   e *= this.scaleY
+
   var f = d + b.width * this.scaleX,
     g = e + b.height * this.scaleY
+
   return d > this.stage.canvas.width || e > this.stage.canvas.height || f < 0 || g < 0 ? !1 : !0
 }
 
@@ -189,37 +199,39 @@ Scene.prototype.getElementsByClass = function (a) {
 }
 
 Scene.prototype.addOperation = function (a) {
-  return this.operations.push(a),
-  this
+  this.operations.push(a)
+  return this
 }
 
 Scene.prototype.clearOperations = function () {
-  return this.operations = [],
-  this
+  this.operations = []
+  return this
 }
 
 Scene.prototype.getElementByXY = function (b, c) {
   for (var d = null, e = this.zIndexArray.length - 1; e >= 0; e--) {
     for (var f = this.zIndexArray[e], g = this.zIndexMap[f], h = g.length - 1; h >= 0; h--) {
       var i = g[h]
-      if (i instanceof InteractiveElement && this.isVisiable(i) && i.isInBound(b, c)) { return d = i }
+      if (i instanceof InteractiveElement && this.isVisiable(i) && i.isInBound(b, c)) {
+        return i
+      }
     }
   }
   return d
 }
 
 Scene.prototype.add = function (a) {
-  this.childs.push(a),
+  this.childs.push(a)
   this.zIndexMap[a.zIndex] == null && (this.zIndexMap[a.zIndex] = [], this.zIndexArray.push(a.zIndex), this.zIndexArray.sort(function (a, b) {
     return a - b
-  })),
+  }))
   this.zIndexMap['' + a.zIndex].push(a)
 }
 
 Scene.prototype.remove = function (b) {
   this.childs = util.removeFromArray(this.childs, b)
   var c = this.zIndexMap[b.zIndex]
-  c && (this.zIndexMap[b.zIndex] = util.removeFromArray(c, b)),
+  c && (this.zIndexMap[b.zIndex] = util.removeFromArray(c, b))
   b.removeHandler(this)
 }
 
@@ -227,10 +239,10 @@ Scene.prototype.clear = function () {
   var a = this
   this.childs.forEach(function (b) {
     b.removeHandler(a)
-  }),
-  this.childs = [],
-  this.operations = [],
-  this.zIndexArray = [],
+  })
+  this.childs = []
+  this.operations = []
+  this.zIndexArray = []
   this.zIndexMap = {}
 }
 
@@ -259,21 +271,29 @@ Scene.prototype.removeFromSelected = function (a) {
 
 Scene.prototype.toSceneEvent = function (b) {
   var c = util.clone(b)
-  if (c.x /= this.scaleX, c.y /= this.scaleY, this.translate == 1) {
+  c.x /= this.scaleX
+  c.y /= this.scaleY
+  if (this.translate == 1) {
     var d = this.getOffsetTranslate()
-    c.x -= d.translateX,
+    c.x -= d.translateX
     c.y -= d.translateY
   }
-  return c.dx != null && (c.dx /= this.scaleX, c.dy /= this.scaleY),
-  this.currentElement != null && (c.target = this.currentElement),
-  c.scene = this,
-  c
+  c.dx != null && (c.dx /= this.scaleX, c.dy /= this.scaleY)
+  this.currentElement != null && (c.target = this.currentElement)
+  c.scene = this
+  return c
 }
 
 Scene.prototype.selectElement = function (a) {
   var b = this.getElementByXY(a.x, a.y)
   if (b != null) {
-    if (a.target = b, b.mousedownHander(a), b.selectedHandler(a), this.notInSelectedNodes(b)) { a.ctrlKey || this.cancleAllSelected(), this.addToSelected(b) } else {
+    a.target = b
+    b.mousedownHander(a)
+    b.selectedHandler(a)
+    if (this.notInSelectedNodes(b)) {
+      a.ctrlKey || this.cancleAllSelected()
+      this.addToSelected(b)
+    } else {
       a.ctrlKey == 1 && (b.unselectedHandler(), this.removeFromSelected(b))
       for (var c = 0; c < this.selectedElements.length; c++) {
         var d = this.selectedElements[c]
@@ -286,19 +306,30 @@ Scene.prototype.selectElement = function (a) {
 
 Scene.prototype.mousedownHandler = function (b) {
   var c = this.toSceneEvent(b)
-  if (this.mouseDown = !0, this.mouseDownX = c.x, this.mouseDownY = c.y, this.mouseDownEvent = c, this.mode == SceneMode.normal) { this.selectElement(c), (this.currentElement == null || this.currentElement instanceof Link) && this.translate == 1 && (this.lastTranslateX = this.translateX, this.lastTranslateY = this.translateY) } else {
-    if (this.mode == SceneMode.drag && this.translate == 1) { return this.lastTranslateX = this.translateX, void (this.lastTranslateY = this.translateY) }
+  this.mouseDown = !0
+  this.mouseDownX = c.x
+  this.mouseDownY = c.y
+  this.mouseDownEvent = c
+  if (this.mode == SceneMode.normal) {
+    this.selectElement(c)
+    ; (this.currentElement == null || this.currentElement instanceof Link) && this.translate == 1 && (this.lastTranslateX = this.translateX, this.lastTranslateY = this.translateY)
+  } else {
+    if (this.mode == SceneMode.drag && this.translate == 1) {
+      this.lastTranslateX = this.translateX
+      this.lastTranslateY = this.translateY
+      return
+    }
     this.mode == SceneMode.select ? this.selectElement(c) : this.mode == SceneMode.edit && (this.selectElement(c), (this.currentElement == null || this.currentElement instanceof Link) && this.translate == 1 && (this.lastTranslateX = this.translateX, this.lastTranslateY = this.translateY))
   }
   this.dispatchEvent('mousedown', c)
 }
 
 Scene.prototype.mouseupHandler = function (b) {
-  this.stage.cursor != MouseCursor.normal && (this.stage.cursor = MouseCursor.normal),
+  this.stage.cursor != MouseCursor.normal && (this.stage.cursor = MouseCursor.normal)
   this.clearOperations()
   var c = this.toSceneEvent(b)
-  this.currentElement != null && (c.target = this.currentElement, this.currentElement.mouseupHandler(c)),
-  this.dispatchEvent('mouseup', c),
+  this.currentElement != null && (c.target = this.currentElement, this.currentElement.mouseupHandler(c))
+  this.dispatchEvent('mouseup', c)
   this.mouseDown = !1
 }
 
@@ -308,7 +339,7 @@ Scene.prototype.dragElements = function (b) {
       var d = this.selectedElements[c]
       if (d.dragable != 0) {
         var e = util.clone(b)
-        e.target = d,
+        e.target = d
         d.mousedragHandler(e)
       }
     }
@@ -317,7 +348,7 @@ Scene.prototype.dragElements = function (b) {
 
 Scene.prototype.mousedragHandler = function (b) {
   var c = this.toSceneEvent(b)
-  this.mode == SceneMode.normal ? this.currentElement == null || this.currentElement instanceof Link ? this.translate == 1 && (this.stage.cursor = MouseCursor.closed_hand, this.translateX = this.lastTranslateX + c.dx, this.translateY = this.lastTranslateY + c.dy) : this.dragElements(c) : this.mode == SceneMode.drag ? this.translate == 1 && (this.stage.cursor = MouseCursor.closed_hand, this.translateX = this.lastTranslateX + c.dx, this.translateY = this.lastTranslateY + c.dy) : this.mode == SceneMode.select ? this.currentElement != null ? this.currentElement.dragable == 1 && this.dragElements(c) : this.areaSelect == 1 && this.areaSelectHandle(c) : this.mode == SceneMode.edit && (this.currentElement == null || this.currentElement instanceof Link ? this.translate == 1 && (this.stage.cursor = MouseCursor.closed_hand, this.translateX = this.lastTranslateX + c.dx, this.translateY = this.lastTranslateY + c.dy) : this.dragElements(c)),
+  this.mode == SceneMode.normal ? this.currentElement == null || this.currentElement instanceof Link ? this.translate == 1 && (this.stage.cursor = MouseCursor.closed_hand, this.translateX = this.lastTranslateX + c.dx, this.translateY = this.lastTranslateY + c.dy) : this.dragElements(c) : this.mode == SceneMode.drag ? this.translate == 1 && (this.stage.cursor = MouseCursor.closed_hand, this.translateX = this.lastTranslateX + c.dx, this.translateY = this.lastTranslateY + c.dy) : this.mode == SceneMode.select ? this.currentElement != null ? this.currentElement.dragable == 1 && this.dragElements(c) : this.areaSelect == 1 && this.areaSelectHandle(c) : this.mode == SceneMode.edit && (this.currentElement == null || this.currentElement instanceof Link ? this.translate == 1 && (this.stage.cursor = MouseCursor.closed_hand, this.translateX = this.lastTranslateX + c.dx, this.translateY = this.lastTranslateY + c.dy) : this.dragElements(c))
   this.dispatchEvent('mousedrag', c)
 }
 
@@ -331,15 +362,17 @@ Scene.prototype.areaSelectHandle = function (a) {
     j = Math.abs(a.dx) * this.scaleX,
     k = Math.abs(a.dy) * this.scaleY,
     l = new SelectArea(h, i, j, k)
-  this.clearOperations().addOperation(l),
-  b = a.x,
-  c = a.y,
-  f = this.mouseDownEvent.x,
-  g = this.mouseDownEvent.y,
-  h = b >= f ? f : b,
-  i = c >= g ? g : c,
-  j = Math.abs(a.dx),
+
+  this.clearOperations().addOperation(l)
+  b = a.x
+  c = a.y
+  f = this.mouseDownEvent.x
+  g = this.mouseDownEvent.y
+  h = b >= f ? f : b
+  i = c >= g ? g : c
+  j = Math.abs(a.dx)
   k = Math.abs(a.dy)
+
   var e = this
   for (var m = h + j, n = i + k, o = 0; o < e.childs.length; o++) {
     var p = e.childs[o]
@@ -371,13 +404,13 @@ Scene.prototype.mouseoutHandler = function (a) {
 
 Scene.prototype.clickHandler = function (a) {
   var b = this.toSceneEvent(a)
-  this.currentElement && (b.target = this.currentElement, this.currentElement.clickHandler(b)),
+  this.currentElement && (b.target = this.currentElement, this.currentElement.clickHandler(b))
   this.dispatchEvent('click', b)
 }
 
 Scene.prototype.dbclickHandler = function (a) {
   var b = this.toSceneEvent(a)
-  this.currentElement ? (b.target = this.currentElement, this.currentElement.dbclickHandler(b)) : this.cancleAllSelected(),
+  this.currentElement ? (b.target = this.currentElement, this.currentElement.dbclickHandler(b)) : this.cancleAllSelected()
   this.dispatchEvent('dbclick', b)
 }
 
@@ -399,8 +432,8 @@ Scene.prototype.addEventListener = function (a, b) {
     d = function (a) {
       b.call(c, a)
     }
-  return this.messageBus.subscribe(a, d),
-  this
+  this.messageBus.subscribe(a, d)
+  return this
 }
 Scene.prototype.removeEventListener = function (a) {
   this.messageBus.unsubscribe(a)
@@ -411,12 +444,12 @@ Scene.prototype.removeAllEventListener = function () {
 }
 
 Scene.prototype.dispatchEvent = function (a, b) {
-  return this.messageBus.publish(a, b),
-  this
+  this.messageBus.publish(a, b)
+  return this
 }
 
 Scene.prototype.zoom = function (a, b) {
-  a != null && a != 0 && (this.scaleX = a),
+  a != null && a != 0 && (this.scaleX = a)
   b != null && b != 0 && (this.scaleY = b)
 }
 
@@ -447,20 +480,23 @@ Scene.prototype.translateToCenter = function (a) {
   var b = this.getElementsBound(),
     c = this.stage.canvas.width / 2 - (b.left + b.right) / 2,
     d = this.stage.canvas.height / 2 - (b.top + b.bottom) / 2
-  a && (c = a.canvas.width / 2 - (b.left + b.right) / 2, d = a.canvas.height / 2 - (b.top + b.bottom) / 2),
-  this.translateX = c,
+
+  a && (c = a.canvas.width / 2 - (b.left + b.right) / 2, d = a.canvas.height / 2 - (b.top + b.bottom) / 2)
+  this.translateX = c
   this.translateY = d
 }
 
 Scene.prototype.setCenter = function (a, b) {
   var c = a - this.stage.canvas.width / 2,
     d = b - this.stage.canvas.height / 2
-  this.translateX = -c,
+
+  this.translateX = -c
   this.translateY = -d
 }
 
 Scene.prototype.centerAndZoom = function (a, b, c) {
-  if (this.translateToCenter(c), a == null || b == null) {
+  this.translateToCenter(c)
+  if (a == null || b == null) {
     var d = this.getElementsBound(),
       e = d.right - d.left,
       f = d.bottom - d.top,
@@ -468,7 +504,9 @@ Scene.prototype.centerAndZoom = function (a, b, c) {
       h = this.stage.canvas.height / f
     c && (g = c.canvas.width / e, h = c.canvas.height / f)
     var i = Math.min(g, h)
-    if (i > 1) { return }
+    if (i > 1) {
+      return
+    }
     this.zoom(i, i)
   }
   this.zoom(a, b)
@@ -486,25 +524,24 @@ Scene.prototype.doLayout = function (a) {
 }
 
 Scene.prototype.toJson = function () {
-  {
-    var a = this,
-      b = '{'
-    this.serializedProperties.length
-  }
+  var a = this,
+    b = '{'
+  this.serializedProperties.length
   this.serializedProperties.forEach(function (c) {
     var d = a[c]
-    c == 'background' && (d = a._background.src),
-    typeof d === 'string' && (d = '"' + d + '"'),
+    c == 'background' && (d = a._background.src)
+    typeof d === 'string' && (d = '"' + d + '"')
     b += '"' + c + '":' + d + ','
-  }),
+  })
   b += '"childs":['
   var c = this.childs.length
-  return this.childs.forEach(function (a, d) {
-    b += a.toJson(),
+  this.childs.forEach(function (a, d) {
+    b += a.toJson()
     c > d + 1 && (b += ',')
-  }),
-  b += ']',
+  })
+  b += ']'
   b += '}'
+  return b
 }
 
 var c = {}
@@ -519,7 +556,7 @@ Object.defineProperties(Scene.prototype, {
         var b = c[a]
         b == null && (b = new Image(), b.src = a, b.onload = function () {
           c[a] = b
-        }),
+        })
         this._background = b
       } else { this._background = a }
     }

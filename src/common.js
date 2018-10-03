@@ -5,6 +5,7 @@ export const noop = a => a
  * =============================================================================
 */
 var e = 'click,mousedown,mouseup,mouseover,mouseout,mousedrag,keydown,keyup'.split(',')
+
 function b(a, b) {
   var c = []
   if (a.length == 0) { return c }
@@ -16,7 +17,9 @@ function b(a, b) {
     e != null && e.length > 0 && (c = c.concat(e))
   } else {
     var f = !1
-    if (d = b.match(/\s*(\w+)\s*\[\s*(\w+)\s*([>=<])\s*['"](\S+)['"]\s*\]\s*/), (d == null || d.length < 5) && (d = b.match(/\s*(\w+)\s*\[\s*(\w+)\s*([>=<])\s*(\d+(\.\d+)?)\s*\]\s*/), f = !0), d != null && d.length >= 5) {
+    d = b.match(/\s*(\w+)\s*\[\s*(\w+)\s*([>=<])\s*['"](\S+)['"]\s*\]\s*/)
+    ; (d == null || d.length < 5) && (d = b.match(/\s*(\w+)\s*\[\s*(\w+)\s*([>=<])\s*(\d+(\.\d+)?)\s*\]\s*/), f = !0)
+    if (d != null && d.length >= 5) {
       var g = d[1],
         h = d[2],
         i = d[3],
@@ -24,23 +27,28 @@ function b(a, b) {
       e = a.filter(function (a) {
         if (a.elementType != g) { return !1 }
         var b = a[h]
-        return f == 1 && (b = parseInt(b)),
-        i == '=' ? b == j : i == '>' ? b > j : i == '<' ? j > b : i == '<=' ? j >= b : i == '>=' ? b >= j : i == '!=' ? b != j : !1
-      }),
+        f == 1 && (b = parseInt(b))
+        return i == '=' ? b == j : i == '>' ? b > j : i == '<' ? j > b : i == '<=' ? j >= b : i == '>=' ? b >= j : i == '!=' ? b != j : !1
+      })
+
       e != null && e.length > 0 && (c = c.concat(e))
     }
   }
   return c
 }
 function c(a) {
-  if (a.find = function (a) {
-    return d.call(this, a)
-  }, e.forEach(function (b) {
+  a.find = function (a) {
+    return find.call(this, a)
+  }
+
+  e.forEach(function (b) {
     a[b] = function (a) {
       for (var c = 0; c < this.length; c++) { this[c][b](a) }
       return this
     }
-  }), a.length > 0) {
+  })
+
+  if (a.length > 0) {
     var b = a[0]
     for (var c in b) {
       var f = b[c]
@@ -49,39 +57,42 @@ function c(a) {
           for (var c = [], d = 0; d < a.length; d++) { c.push(b.apply(a[d], arguments)) }
           return c
         }
-      }
-      (f))
+      }(f))
     }
   }
-  return a.attr = function (a, b) {
+  a.attr = function (a, b) {
     if (a != null && b != null) {
       for (var c = 0; c < this.length; c++) { this[c][a] = b }
     } else {
       if (a != null && typeof a == 'string') {
-        for (var d = [], c = 0; c < this.length; c++) { d.push(this[c][a]) }
+        c = 0
+        for (var d = []; c < this.length; c++) {
+          d.push(this[c][a])
+        }
         return d
       }
       if (a != null) {
-        for (var c = 0; c < this.length; c++) {
+        for (c = 0; c < this.length; c++) {
           for (var e in a) { this[c][e] = a[e] }
         }
       }
     }
     return this
-  },
-  a
+  }
+  return a
 }
 
 export const find = function find(d) {
   var e = [],
     f = []
-  this instanceof JTopo.Stage ? (e = this.childs, f = f.concat(e)) : this instanceof JTopo.Scene ? e = [this] : f = this,
+
+  this instanceof JTopo.Stage ? (e = this.childs, f = f.concat(e)) : this instanceof JTopo.Scene ? e = [this] : f = this
   e.forEach(function (a) {
     f = f.concat(a.childs)
   })
   var g = null
-  return g = typeof d == 'function' ? f.filter(d) : b(f, d),
-  g = c(g)
+  g = typeof d == 'function' ? f.filter(d) : b(f, d)
+  return c(g)
 }
 /**
  * find method end
@@ -121,9 +132,12 @@ export function createStageFromJson(jsonObj, canvas) {
   var stage = new JTopo.Stage(canvas)
   for (var k in jsonObj) { k != 'childs' && (stage[k] = jsonObj[k]) }
   var scenes = jsonObj.childs
-  return scenes.forEach(function (a) {
+  scenes.forEach(function (a) {
     var b = new JTopo.Scene(stage)
-    for (var c in a) { c != 'childs' && (b[c] = a[c]), c == 'background' && (b.background = a[c]) }
+    for (var c in a) {
+      c != 'childs' && (b[c] = a[c])
+      c == 'background' && (b.background = a[c])
+    }
     var d = a.childs
     d.forEach(function (a) {
       var c = null,
@@ -132,8 +146,8 @@ export function createStageFromJson(jsonObj, canvas) {
       for (var e in a) { c[e] = a[e] }
       b.add(c)
     })
-  }),
-  stage
+  })
+  return stage
 }
 
 export const extend = function extend(SubClass, SuperClass) {

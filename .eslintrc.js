@@ -33,7 +33,8 @@ module.exports = {
 
     // temp
     'eqeqeq': 0,
-    'no-eval': 0
+    'no-eval': 0,
+    'no-unused-expressions': 0
   },
 
   "globals": {

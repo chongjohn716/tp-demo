@@ -53,7 +53,7 @@ Link.prototype.removeHandler = function () {
   var a = this
   this.nodeA && this.nodeA.outLinks && (this.nodeA.outLinks = this.nodeA.outLinks.filter(function (b) {
     return b !== a
-  })),
+  }))
   this.nodeZ && this.nodeZ.inLinks && (this.nodeZ.inLinks = this.nodeZ.inLinks.filter(function (b) {
     return b !== a
   }))
@@ -71,12 +71,12 @@ Link.prototype.getStartPosition = function () {
 }
 Link.prototype.getEndPosition = function () {
   var a
-  return this.arrowsRadius != null && (a = h(this.nodeZ, this.nodeA)),
+  this.arrowsRadius != null && (a = h(this.nodeZ, this.nodeA))
   a == null && (a = {
     x: this.nodeZ.cx,
     y: this.nodeZ.cy
-  }),
-  a
+  })
+  return a
 }
 Link.prototype.getPath = function () {
   var a = [],
@@ -106,50 +106,59 @@ Link.prototype.getPath = function () {
       x: h.x + l * Math.cos(j),
       y: h.y + l * Math.sin(j)
     }
-  return m = {
+
+  m = {
     x: m.x + k * Math.cos(i - Math.PI),
     y: m.y + k * Math.sin(i - Math.PI)
-  },
+  }
   n = {
     x: n.x + k * Math.cos(j - Math.PI),
     y: n.y + k * Math.sin(j - Math.PI)
-  },
+  }
   a.push({
     x: b.x,
     y: b.y
-  }),
+  })
   a.push({
     x: m.x,
     y: m.y
-  }),
+  })
   a.push({
     x: n.x,
     y: n.y
-  }),
+  })
   a.push({
     x: c.x,
     y: c.y
-  }),
-  a
+  })
+
+  return a
 }
 Link.prototype.paintPath = function (a, b) {
-  if (this.nodeA === this.nodeZ) { return void this.paintLoop(a) }
-  a.beginPath(),
+  if (this.nodeA === this.nodeZ) {
+    return void this.paintLoop(a)
+  }
+  a.beginPath()
   a.moveTo(b[0].x, b[0].y)
-  for (var c = 1; c < b.length; c++) { this.dashedPattern == null ? a.lineTo(b[c].x, b[c].y) : a.JTopoDashedLineTo(b[c - 1].x, b[c - 1].y, b[c].x, b[c].y, this.dashedPattern) }
-  if (a.stroke(), a.closePath(), this.arrowsRadius != null) {
+  for (var c = 1; c < b.length; c++) {
+    this.dashedPattern == null ? a.lineTo(b[c].x, b[c].y) : a.JTopoDashedLineTo(b[c - 1].x, b[c - 1].y, b[c].x, b[c].y, this.dashedPattern)
+  }
+  a.stroke()
+  a.closePath()
+  if (this.arrowsRadius != null) {
     var d = b[b.length - 2],
       e = b[b.length - 1]
+
     this.paintArrow(a, d, e)
   }
 }
 Link.prototype.paintLoop = function (a) {
-  a.beginPath(); {
-    var b = this.bundleGap * (this.nodeIndex + 1) / 2
-    Math.PI + Math.PI / 2
-  }
-  a.arc(this.nodeA.x, this.nodeA.y, b, Math.PI / 2, 2 * Math.PI),
-  a.stroke(),
+  a.beginPath()
+
+  var b = this.bundleGap * (this.nodeIndex + 1) / 2
+  Math.PI + Math.PI / 2
+  a.arc(this.nodeA.x, this.nodeA.y, b, Math.PI / 2, 2 * Math.PI)
+  a.stroke()
   a.closePath()
 }
 Link.prototype.paintArrow = function (b, c, d, flag) {
@@ -163,7 +172,9 @@ Link.prototype.paintArrow = function (b, c, d, flag) {
     l = g.y + (j + e) * Math.sin(i),
     m = h.x + e * Math.cos(i),
     n = h.y + e * Math.sin(i)
+
   i -= Math.PI / 2
+
   var o = {
       x: k + f * Math.cos(i),
       y: l + f * Math.sin(i)
@@ -172,12 +183,13 @@ Link.prototype.paintArrow = function (b, c, d, flag) {
       x: k + f * Math.cos(i - Math.PI),
       y: l + f * Math.sin(i - Math.PI)
     }
-  b.beginPath(),
-  b.fillStyle = 'rgba(' + this.strokeColor + ',' + this.alpha + ')',
-  b.moveTo(o.x, o.y),
-  b.lineTo(m, n),
-  b.lineTo(p.x, p.y),
-  b.stroke(),
+
+  b.beginPath()
+  b.fillStyle = 'rgba(' + this.strokeColor + ',' + this.alpha + ')'
+  b.moveTo(o.x, o.y)
+  b.lineTo(m, n)
+  b.lineTo(p.x, p.y)
+  b.stroke()
   b.closePath()
 
   if (flag) {
@@ -186,44 +198,60 @@ Link.prototype.paintArrow = function (b, c, d, flag) {
 
   this.bothArrow && this.paintArrow(b, d, c, true)
 }
+
 Link.prototype.paint = function (a) {
   if (this.nodeA != null && !this.nodeZ != null) {
     var b = this.getPath(this.nodeIndex)
-    this.path = b,
-    a.strokeStyle = 'rgba(' + this.strokeColor + ',' + this.alpha + ')',
-    a.lineWidth = this.lineWidth,
-    this.paintPath(a, b),
+    this.path = b
+    a.strokeStyle = 'rgba(' + this.strokeColor + ',' + this.alpha + ')'
+    a.lineWidth = this.lineWidth
+    this.paintPath(a, b)
     b && b.length > 0 && this.paintText(a, b)
   }
 }
+
 Link.prototype.paintText = function (a, b) {
   var c = b[0],
     d = b[b.length - 1]
-  if (b.length == 4 && (c = b[1], d = b[2]), this.text && this.text.length > 0) {
+
+  b.length == 4 && (c = b[1], d = b[2])
+
+  if (this.text && this.text.length > 0) {
     var e = (d.x + c.x) / 2 + this.textOffsetX,
       f = (d.y + c.y) / 2 + this.textOffsetY
-    a.save(),
-    a.beginPath(),
+
+    a.save()
+    a.beginPath()
     a.font = this.font
+
     var g = a.measureText(this.text).width,
       h = a.measureText('田').width
-    if (a.fillStyle = 'rgba(' + this.fontColor + ', ' + this.alpha + ')', this.nodeA === this.nodeZ) {
-      var j = this.bundleGap * (this.nodeIndex + 1) / 2,
-        e = this.nodeA.x + j * Math.cos(minus270),
-        f = this.nodeA.y + j * Math.sin(minus270)
+
+    a.fillStyle = 'rgba(' + this.fontColor + ', ' + this.alpha + ')'
+
+    if (this.nodeA === this.nodeZ) {
+      var j = this.bundleGap * (this.nodeIndex + 1) / 2
+
+      e = this.nodeA.x + j * Math.cos(minus270)
+      f = this.nodeA.y + j * Math.sin(minus270)
       a.fillText(this.text, e, f)
-    } else { a.fillText(this.text, e - g / 2, f - h / 2) }
-    a.stroke(),
-    a.closePath(),
+    } else {
+      a.fillText(this.text, e - g / 2, f - h / 2)
+    }
+
+    a.stroke()
+    a.closePath()
     a.restore()
   }
 }
+
 Link.prototype.paintSelected = function (a) {
-  a.shadowBlur = 10,
-  a.shadowColor = 'rgba(0,0,0,1)',
-  a.shadowOffsetX = 0,
+  a.shadowBlur = 10
+  a.shadowColor = 'rgba(0,0,0,1)'
+  a.shadowOffsetX = 0
   a.shadowOffsetY = 0
 }
+
 Link.prototype.isInBound = function (b, c) {
   if (this.nodeA === this.nodeZ) {
     var d = this.bundleGap * (this.nodeIndex + 1) / 2,
@@ -233,6 +261,7 @@ Link.prototype.isInBound = function (b, c) {
       }) - d
     return Math.abs(e) <= 3
   }
+
   for (var f = !1, g = 1; g < this.path.length; g++) {
     var h = this.path[g - 1],
       i = this.path[g]

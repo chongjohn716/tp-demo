@@ -9,8 +9,8 @@ function FlexionalLink(a, b, c) {
 extend(FlexionalLink, Link)
 
 FlexionalLink.prototype.initialize = function () {
-  FlexionalLink.super.initialize.apply(this, arguments),
-  this.direction = 'vertical',
+  FlexionalLink.super.initialize.apply(this, arguments)
+  this.direction = 'vertical'
   this.offsetGap = 44
 }
 FlexionalLink.prototype.getStartPosition = function () {
@@ -18,16 +18,16 @@ FlexionalLink.prototype.getStartPosition = function () {
     x: this.nodeA.cx,
     y: this.nodeA.cy
   }
-  return this.direction == 'horizontal' ? a.x = this.nodeZ.cx < a.x ? this.nodeA.x : this.nodeA.x + this.nodeA.width : a.y = this.nodeZ.cy < a.y ? this.nodeA.y : this.nodeA.y + this.nodeA.height,
-  a
+  this.direction == 'horizontal' ? a.x = this.nodeZ.cx < a.x ? this.nodeA.x : this.nodeA.x + this.nodeA.width : a.y = this.nodeZ.cy < a.y ? this.nodeA.y : this.nodeA.y + this.nodeA.height
+  return a
 }
 FlexionalLink.prototype.getEndPosition = function () {
   var a = {
     x: this.nodeZ.cx,
     y: this.nodeZ.cy
   }
-  return this.direction == 'horizontal' ? a.x = this.nodeA.cx < a.x ? this.nodeZ.x : this.nodeZ.x + this.nodeZ.width : a.y = this.nodeA.cy < a.y ? this.nodeZ.y : this.nodeZ.y + this.nodeZ.height,
-  a
+  this.direction == 'horizontal' ? a.x = this.nodeA.cx < a.x ? this.nodeZ.x : this.nodeZ.x + this.nodeZ.width : a.y = this.nodeA.cy < a.y ? this.nodeZ.y : this.nodeZ.y + this.nodeZ.height
+  return a
 }
 FlexionalLink.prototype.getPath = function (a) {
   var b = this.getStartPosition(),
@@ -38,7 +38,7 @@ FlexionalLink.prototype.getPath = function (a) {
     g = (f - 1) * this.bundleGap,
     h = this.bundleGap * a - g / 2,
     i = this.offsetGap
-  return this.direction == 'horizontal' ? (this.nodeA.cx > this.nodeZ.cx && (i = -i), d.push({
+  this.direction == 'horizontal' ? (this.nodeA.cx > this.nodeZ.cx && (i = -i), d.push({
     x: b.x,
     y: b.y + h
   }), d.push({
@@ -62,7 +62,7 @@ FlexionalLink.prototype.getPath = function (a) {
   }), d.push({
     x: c.x + h,
     y: c.y
-  })),
-  d
+  }))
+  return d
 }
 export default FlexionalLink
