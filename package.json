@@ -17,7 +17,7 @@
         "start": "node server.js",
         "dev": "webpack-dev-server -w --mode development",
         "build": "webpack --mode production --display-error-details",
-        "lint": "eslint --fix src scripts test"
+        "lint": "eslint --fix src"
     },
     "gitHooks": {
         "pre-commit": "lint-staged",
