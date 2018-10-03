@@ -1,6 +1,8 @@
 import util from './util'
 import MessageBus from './message-bus'
 
+var o = !1
+
 function b(b, c) {
   var d,
     e = null

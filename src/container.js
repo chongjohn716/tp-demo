@@ -40,7 +40,7 @@ Container.prototype.remove = function (a) {
   for (var b = 0; b < this.childs.length; b++) {
     if (this.childs[b] === a) {
       a.parentContainer = null,
-      this.childs = this.childs.del(b),
+      this.childs = del.call(this.childs, b),
       a.lastParentContainer = this
       break
     }

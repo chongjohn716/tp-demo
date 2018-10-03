@@ -281,7 +281,7 @@ Stage.prototype.add = function (a) {
 Stage.prototype.remove = function (a) {
   if (a == null) { throw new Error('Stage.remove出错: 参数为null!') }
   for (var b = 0; b < this.childs.length; b++) {
-    if (this.childs[b] === a) { return a.stage = null, this.childs = this.childs.del(b), this }
+    if (this.childs[b] === a) { return a.stage = null, this.childs = del.call(this.childs, b), this }
   }
   return this
 }

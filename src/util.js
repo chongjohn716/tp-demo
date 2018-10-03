@@ -77,7 +77,7 @@ function removeFromArray(a, b) {
   for (var c = 0; c < a.length; c++) {
     var d = a[c]
     if (d === b) {
-      a = a.del(c)
+      a = del.call(a, c)
       break
     }
   }

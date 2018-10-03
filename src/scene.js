@@ -253,7 +253,7 @@ Scene.prototype.notInSelectedNodes = function (a) {
 Scene.prototype.removeFromSelected = function (a) {
   for (var b = 0; b < this.selectedElements.length; b++) {
     var c = this.selectedElements[b]
-    a === c && (this.selectedElements = this.selectedElements.del(b))
+    a === c && (this.selectedElements = del.call(this.selectedElements, b))
   }
 }
 
