@@ -35,5 +35,6 @@ module.exports = {
     // allow tabs
     'no-tabs': 'off'
   },
+
   "globals": {},
 }
