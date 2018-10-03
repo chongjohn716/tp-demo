@@ -440,7 +440,7 @@ Object.defineProperties(Stage.prototype, {
 	},
 
 	mode: {
-		set: function () {
+		set: function (a) {
 			this.childs.forEach(function (b) {
 				b.mode = a
 			})

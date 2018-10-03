@@ -30,4 +30,3 @@ export const defaultZIndex = {
 }
 
 export const minus270 = -(Math.PI / 2 + Math.PI / 4)
-

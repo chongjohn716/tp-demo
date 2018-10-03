@@ -73,8 +73,6 @@ export default function (global = window) {
     setTimeout(a, 1e3 / 24)
   }
 
-
-
   /* eslint-disable */
   // Array.prototype.del || Array.prototype.del = del
   // Array.prototype.indexOf || Array.prototype.indexOf = indexOf
@@ -89,4 +87,3 @@ export default function (global = window) {
     error: function () { }
   })
 }
-

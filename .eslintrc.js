@@ -27,14 +27,16 @@ module.exports = {
         "asyncArrow": "ignore"
       }
     ],
-    // tabbed indentation
-    'indent': ['error', 'tab'
-    ],
+
     // enforce variables to be declared either together or separately in functions
     'one-var': 0,
-    // allow tabs
-    'no-tabs': 'off'
+
+    // temp
+    'eqeqeq': 0,
+    'no-eval': 0
   },
 
-  "globals": {},
+  "globals": {
+    'JTopo': true
+  },
 }
