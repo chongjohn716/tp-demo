@@ -1,9 +1,7 @@
-import util from './util'
 import InteractiveElement from './elements/interactive-element'
 import layout from './layout'
 import { defaultZIndex } from './const'
-import { del } from './extend-native'
-import { extend } from './common'
+import { extend, del } from './common'
 function Container(c) {
   this.initialize(c)
 }

@@ -83,11 +83,39 @@ export const find = function find(d) {
   return g = typeof d == 'function' ? f.filter(d) : b(f, d),
   g = c(g)
 }
-
 /**
  * find method end
  * =============================================================================
 */
+
+/**
+ * extend array start
+ * =============================================================================
+ */
+export const del = function (a) {
+  if (typeof a !== 'number') {
+    for (let b = 0; b < this.length; b++) {
+      if (this[b] === a) {
+        return this.slice(0, b).concat(this.slice(b + 1, this.length))
+      }
+    }
+    return this
+  }
+  return a < 0 ? this : this.slice(0, a).concat(this.slice(a + 1, this.length))
+}
+
+export const indexOf = function (a) {
+  for (let b = 0; b < this.length; b++) {
+    if (this[b] === a) {
+      return b
+    }
+  }
+  return -1
+}
+/**
+ * extend array end
+ * =============================================================================
+ */
 
 export function createStageFromJson(jsonObj, canvas) {
   var stage = new JTopo.Stage(canvas)

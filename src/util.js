@@ -1,4 +1,4 @@
-import { del } from './extend-native'
+import { del } from './common'
 
 const canvas = document.createElement('canvas')
 const graphics = canvas.getContext('2d')

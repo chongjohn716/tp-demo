@@ -4,8 +4,7 @@ import InteractiveElement from './elements/interactive-element'
 import Node from './nodes/node'
 import Link from './links/link'
 import MessageBus from './message-bus'
-import { find, extend } from './common'
-import { del } from './extend-native'
+import { find, extend, del } from './common'
 
 import {
   SceneMode,

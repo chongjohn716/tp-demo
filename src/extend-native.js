@@ -1,20 +1,3 @@
-export const del = function (a) {
-  if (typeof a !== 'number') {
-    for (let b = 0; b < this.length; b++) {
-      if (this[b] === a) { return this.slice(0, b).concat(this.slice(b + 1, this.length)) }
-    }
-    return this
-  }
-  return a < 0 ? this : this.slice(0, a).concat(this.slice(a + 1, this.length))
-}
-
-export const indexOf = function (a) {
-  for (let b = 0; b < this.length; b++) {
-    if (this[b] === a) { return b }
-  }
-  return -1
-}
-
 export default function (global = window) {
   /**
    * CanvasRenderingContext2D 扩展
@@ -72,11 +55,6 @@ export default function (global = window) {
   window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame || function (a) {
     setTimeout(a, 1e3 / 24)
   }
-
-  /* eslint-disable */
-  // Array.prototype.del || Array.prototype.del = del
-  // Array.prototype.indexOf || Array.prototype.indexOf = indexOf
-  /* eslint-enable */
 
   // 没用
   window.console || (window.console = {
