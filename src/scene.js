@@ -427,6 +427,10 @@ Scene.prototype.keyupHandler = function (a) {
   this.dispatchEvent('keyup', a)
 }
 
+Scene.prototype.contextmenuHandler = function (a) {
+  this.dispatchEvent('contextmenu', a)
+}
+
 Scene.prototype.addEventListener = function (a, b) {
   var c = this,
     d = function (a) {

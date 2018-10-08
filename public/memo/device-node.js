@@ -10,21 +10,21 @@
 
   var containerSetLoction = JTopo.Container.prototype.setLocation
 
-  function DeviceNode(opiton) {
-    this.initialize(opiton)
+  function DeviceNode(option) {
+    this.initialize(option)
   }
 
   JTopo.extend(DeviceNode, JTopo.Node)
 
-  DeviceNode.prototype.initialize = function (opiton) {
-    this.constructor.super.initialize.call(this, opiton.text)
+  DeviceNode.prototype.initialize = function (option) {
+    this.constructor.super.initialize.call(this, option.text)
 
 
     this.setBound(
-      opiton.x + borderWidth,
-      opiton.y + borderWidth,
-      opiton.width - borderWidth * 2,
-      opiton.height - borderWidth * 2
+      option.x + borderWidth,
+      option.y + borderWidth,
+      option.width - borderWidth * 2,
+      option.height - borderWidth * 2
     )
 
     this.textPosition = "Middle_Center"
@@ -36,7 +36,7 @@
 
     this.setLocation = containerSetLoction
 
-    this.createChilds(opiton)
+    this.createChilds(option)
   }
 
   DeviceNode.prototype.addTo = function (con, selfOnly) {
@@ -51,9 +51,11 @@
     })
   }
 
-  DeviceNode.prototype.createChilds = function (opiton) {
-    this.childs = createChildNodes(opiton)
+  DeviceNode.prototype.createChilds = function (option) {
+    this.childs = createChildNodes(option)
   }
+
+  // removeHandler
 
   function createChildNodes({
     x, y, height, width

@@ -4,6 +4,8 @@ import util from './util'
 import Stage from './stage'
 import Scene from './scene'
 
+import MessageBus from './message-bus'
+
 import Node from './nodes/node'
 import TextNode from './nodes/text-node'
 import LinkNode from './nodes/link-node'
@@ -55,6 +57,8 @@ const JTopo = {
   util,
 
   createStageFromJson,
+
+  MessageBus,
 
   extend
 }

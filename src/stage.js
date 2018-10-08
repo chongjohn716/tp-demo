@@ -201,7 +201,7 @@ Stage.prototype.bindEvent = function (c) {
   function f(a) {
     p = setTimeout(function () {
       o = !0
-    }, 500)
+    }, 100)
     document.onselectstart = function () {
       return !0
     }
@@ -232,6 +232,7 @@ Stage.prototype.bindEvent = function (c) {
     n.mouseDown ? a.button == 0 && (b.dx = b.x - n.mouseDownX, b.dy = b.y - n.mouseDownY, n.dispatchEventToScenes('mousedrag', b), n.dispatchEvent('mousedrag', b), n.eagleEye.visible == 1 && n.eagleEye.update()) : (n.dispatchEventToScenes('mousemove', b), n.dispatchEvent('mousemove', b))
   }
   function j(a) {
+    debugger
     var b = d(a)
     n.dispatchEventToScenes('click', b)
     n.dispatchEvent('click', b)
@@ -248,7 +249,7 @@ Stage.prototype.bindEvent = function (c) {
     n.wheelZoom != null && (a.preventDefault ? a.preventDefault() : (a = a || window.event, a.returnValue = !1), n.eagleEye.visible == 1 && n.eagleEye.update())
   }
   function m(b) {
-    util.isIE || !window.addEventListener ? (b.onmouseout = f, b.onmouseover = e, b.onmousedown = g, b.onmouseup = h, b.onmousemove = i, b.onclick = j, b.ondblclick = k, b.onmousewheel = l, b.touchstart = g, b.touchmove = i, b.touchend = h) : (b.addEventListener('mouseout', f), b.addEventListener('mouseover', e), b.addEventListener('mousedown', g), b.addEventListener('mouseup', h), b.addEventListener('mousemove', i), b.addEventListener('click', j), b.addEventListener('dblclick', k), util.isFirefox ? b.addEventListener('DOMMouseScroll', l) : b.addEventListener('mousewheel', l))
+    (util.isIE || !window.addEventListener) ? (b.onmouseout = f, b.onmouseover = e, b.onmousedown = g, b.onmouseup = h, b.onmousemove = i, b.onclick = j, b.ondblclick = k, b.onmousewheel = l, b.touchstart = g, b.touchmove = i, b.touchend = h) : (b.addEventListener('mouseout', f), b.addEventListener('mouseover', e), b.addEventListener('mousedown', g), b.addEventListener('mouseup', h), b.addEventListener('mousemove', i), b.addEventListener('click', j), b.addEventListener('dblclick', k), util.isFirefox ? b.addEventListener('DOMMouseScroll', l) : b.addEventListener('mousewheel', l))
     window.addEventListener && (window.addEventListener('keydown', function (b) {
       n.dispatchEventToScenes('keydown', util.cloneEvent(b))
       var c = b.keyCode;
@@ -260,9 +261,21 @@ Stage.prototype.bindEvent = function (c) {
     }, !0))
   }
 
-  document.oncontextmenu = function () {
-    return o
-  }
+  // document.oncontextmenu = function (e) {
+  //   console.log('contextmenu: ', o)
+  //   !o && (n.dispatchEventToScenes('contextmenu'), n.dispatchEvent('contextmenu'))
+  //   return o
+  // }
+
+  window.addEventListener('contextmenu', function (e) { // Not compatible with IE < 9
+    console.log('contextmenu: ', o)
+    if (e.target !== n.canvas) {
+      return
+    }
+    e.preventDefault()
+    n.dispatchEventToScenes('contextmenu', e)
+    n.dispatchEvent('contextmenu', e)
+  }, false)
 
   m(c)
 }
@@ -279,7 +292,9 @@ Stage.prototype.dispatchEventToScenes = function (a, b) {
   this.childs.forEach(function (c) {
     if (c.visible == 1) {
       var d = c[a + 'Handler']
-      if (d == null) { throw new Error('Function not found:' + a + 'Handler') }
+      if (d == null) {
+        throw new Error('Function not found:' + a + 'Handler')
+      }
       d.call(c, b)
     }
   })
